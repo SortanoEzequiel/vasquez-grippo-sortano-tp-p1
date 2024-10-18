@@ -3,6 +3,8 @@ package juego;
 
 
 import entorno.InterfaceJuego;
+
+import java.awt.Color;
 import java.awt.Image;
 import entorno.Herramientas;
 import entorno.Entorno;
@@ -18,7 +20,7 @@ public class Juego extends InterfaceJuego
 	
 	private Bloques bl;
 	
-	private Pep p;
+	private Pep pep;
 	
 	
 	Juego()
@@ -30,7 +32,7 @@ public class Juego extends InterfaceJuego
 		// ...
 		this.fondo = Herramientas.cargarImagen("imagenes/fondogame.jpg");
 		this.bl = new Bloques();
-		this.p = new Pep(100,490,30,30);
+		this.pep = new Pep(100,490,30,30); // Creo a PEP
 		// Inicia el juego!
 		this.entorno.iniciar();
 		
@@ -50,32 +52,51 @@ public class Juego extends InterfaceJuego
 		
 		bl.dibujarBloques(entorno);
 		
-		p.dibujar(entorno);
+		pep.dibujar(entorno);
 		
 		Bloque[] bloq = bl.getTotalBloques();
 		
 		if(this.entorno.estaPresionada(this.entorno.TECLA_DERECHA)) {
-			this.p.moverDerecha();
+			this.pep.moverDerecha();
 		}
 		if(this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)) {
-			this.p.moverIzquierda();
+			this.pep.moverIzquierda();
 		}
 		if(this.entorno.sePresiono(this.entorno.TECLA_ARRIBA)) {
-			this.p.saltar();
+			this.pep.saltar();
 		}	
 		
 		if(this.entorno.sePresiono(this.entorno.TECLA_ABAJO)) {
-			this.p.bajar();
+			this.pep.bajar();
 		}
 		
-		if (p.getY()<bloq[0].getY()-30) {
-			p.caer();
+		if (pep.getY()<bloq[0].getY()-30) {
+			pep.caer();
+		}
+		
+		//if (pep.getX()>bloq[0].getX()*2-25 && pep.getX()<bloq[0].getX()*3-75 || pep.getY()>550) {
+		//	pep.caer();
+		//}
+		
+		if (pep.getX()< bloq[0].getXizq() || pep.getX()>bloq[0].getXder() && pep.getX()<bloq[0].getXder()+50 || pep.getY()>550) {
+			pep.caer();
+		}
+		
+		if (pep.getX()>bloq[1].getXder() && pep.getX()<bloq[1].getXder()+50 || pep.getY()>550) {
+			pep.caer();
+		}
+		if (pep.getX()>bloq[2].getXder() && pep.getX()<bloq[2].getXder()+50 || pep.getY()>550) {
+			pep.caer();
+		}
+		if (pep.getX()>bloq[3].getXder()) {
+			pep.caer();
 		}
 		
 		
-		if (p.getX()>bloq[0].getX()*2-25 && p.getX()<bloq[0].getX()*3-75 || p.getY()>550) {
-			p.caer();
-		}
+		
+		
+		entorno.dibujarCirculo(100, 525, 5, null);
+		//entorno.dibujarRectangulo(100, 525, 140, 40, 0, null);
 
 
 	}

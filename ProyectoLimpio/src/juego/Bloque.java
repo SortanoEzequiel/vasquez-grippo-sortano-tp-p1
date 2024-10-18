@@ -16,6 +16,14 @@ public class Bloque {
 	public int getX() {
         return x;
     }
+	
+	public int getXder() {
+        return x+75;
+    }
+	
+	public int getXizq() {
+        return x-75;
+    }
 
     public int getY() {
         return y;

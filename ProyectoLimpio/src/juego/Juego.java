@@ -22,6 +22,7 @@ public class Juego extends InterfaceJuego
 	
 	private Pep pep;
 	
+	private boolean direccion=true;
 	
 	Juego()
 	{
@@ -32,7 +33,7 @@ public class Juego extends InterfaceJuego
 		// ...
 		this.fondo = Herramientas.cargarImagen("imagenes/fondogame.jpg");
 		this.bl = new Bloques();
-		this.pep = new Pep(100,490,30,30); // Creo a PEP
+		this.pep = new Pep(); // Creo a PEP
 		// Inicia el juego!
 		this.entorno.iniciar();
 		
@@ -49,57 +50,110 @@ public class Juego extends InterfaceJuego
 		// Procesamiento de un instante de tiempo
 		// ...
 		entorno.dibujarImagen(fondo,entorno.ancho() / 2, entorno.alto() / 2, 0);
-		
+				
 		bl.dibujarBloques(entorno);
 		
-		pep.dibujar(entorno);
 		
-		Bloque[] bloq = bl.getTotalBloques();
-		
-		if(this.entorno.estaPresionada(this.entorno.TECLA_DERECHA)) {
-			this.pep.moverDerecha();
-		}
-		if(this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)) {
-			this.pep.moverIzquierda();
-		}
-		if(this.entorno.sePresiono(this.entorno.TECLA_ARRIBA)) {
-			this.pep.saltar();
-		}	
-		
-		if(this.entorno.sePresiono(this.entorno.TECLA_ABAJO)) {
-			this.pep.bajar();
-		}
-		
-		if (pep.getY()<bloq[0].getY()-30) {
-			pep.caer();
-		}
-		
-		//if (pep.getX()>bloq[0].getX()*2-25 && pep.getX()<bloq[0].getX()*3-75 || pep.getY()>550) {
-		//	pep.caer();
-		//}
-		
-		if (pep.getX()< bloq[0].getXizq() || pep.getX()>bloq[0].getXder() && pep.getX()<bloq[0].getXder()+50 || pep.getY()>550) {
-			pep.caer();
-		}
-		
-		if (pep.getX()>bloq[1].getXder() && pep.getX()<bloq[1].getXder()+50 || pep.getY()>550) {
-			pep.caer();
-		}
-		if (pep.getX()>bloq[2].getXder() && pep.getX()<bloq[2].getXder()+50 || pep.getY()>550) {
-			pep.caer();
-		}
-		if (pep.getX()>bloq[3].getXder()) {
-			pep.caer();
+		if (this.pep !=null){
+			//pep.dibujar(entorno);
+			
+			boolean direccion= moverPep();
+			
+			pep.dibujarImagenEspejada(entorno, direccion);
+						
+			pepSobreBloques();
 		}
 		
 		
 		
 		
-		entorno.dibujarCirculo(100, 525, 5, null);
+		/*
+		 
+		Bloque[] bloq = bl.getTotalBloques();		
+		
+		boolean enBloque=false;	
+		
+		if (pep.getBase()>= bloq[9].getSup() && pep.getDer()> bloq[9].getXizq() && pep.getIzq()<bloq[9].getXder() && pep.getBase()<bloq[9].getInf()) 
+				enBloque=true;
+			else {
+				enBloque=false;
+			}
+		
+		
+		if (pep.getBase()>= bloq[8].getSup() && pep.getDer()> bloq[8].getXizq() && pep.getIzq()<bloq[8].getXder() && pep.getBase()<bloq[8].getInf() || pep.getBase()>= bloq[8].getSup() && pep.getDer()> bloq[7].getXizq() && pep.getIzq()<bloq[7].getXder() && pep.getBase()<bloq[7].getInf()) 
+				enBloque=true;
+			else {
+				enBloque=false;
+		}
+		
+		if (pep.getBase()>= bloq[6].getSup()){
+			if (pep.getDer()> bloq[6].getXizq() && pep.getIzq()<bloq[6].getXder() && pep.getBase()<bloq[6].getInf() || pep.getDer()> bloq[5].getXizq() && pep.getIzq()<bloq[5].getXder() && pep.getBase()<bloq[5].getInf() || pep.getDer()> bloq[4].getXizq() && pep.getIzq()<bloq[4].getXder() && pep.getBase()<bloq[4].getInf()) 
+				enBloque=true;
+			else {
+				enBloque=false;
+			}			
+		}
+		if (pep.getBase()>= bloq[0].getSup()){
+			if (pep.getDer()> bloq[0].getXizq() && pep.getIzq()<bloq[0].getXder() && pep.getBase()<bloq[0].getInf() || pep.getDer()> bloq[1].getXizq() && pep.getIzq()<bloq[1].getXder() && pep.getBase()<bloq[1].getInf() || pep.getDer()> bloq[2].getXizq() && pep.getIzq()<bloq[2].getXder() && pep.getBase()<bloq[2].getInf() || pep.getDer()> bloq[3].getXizq() && pep.getIzq()<bloq[3].getXder() && pep.getBase()<bloq[3].getInf()) 
+				enBloque=true;
+			else {
+				enBloque=false;
+			}			
+		}
+					
+			
+		
+				
+		entorno.dibujarCirculo(bloq[1].getXder()+65, bloq[9].getInf(), 5, Color.BLUE);*/
 		//entorno.dibujarRectangulo(100, 525, 140, 40, 0, null);
-
+		
 
 	}
+	
+	
+	private boolean moverPep() {
+		
+        if (entorno.estaPresionada(entorno.TECLA_DERECHA)) {
+            pep.moverDerecha();
+            direccion= true;
+        }
+        if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
+            pep.moverIzquierda();
+            direccion= false;
+        }
+        if (entorno.sePresiono(entorno.TECLA_ARRIBA)) {        	
+        	pep.saltar();
+        }
+        
+        return direccion;
+    }	
+	
+	
+	
+	private void pepSobreBloques() {
+		
+		Bloque[] bloq = bl.getTotalBloques();		
+		
+		boolean enBloque=false;		
+					
+		for (int i=0;i<bloq.length;i++) {
+			if (pep.getBase()>= bloq[i].getSup() && pep.getDer()> bloq[i].getXizq() && pep.getIzq()<bloq[i].getXder() && pep.getBase()<bloq[i].getInf())
+				enBloque=true;
+		}
+		
+		if (pep.getTecho()>800) {
+			this.pep=null;
+		}else {
+			if (!enBloque) {
+				pep.caer();
+			}else {
+				pep.reiniciarSaltos();								
+			}
+		}		
+		
+	}
+	
+
 	
 
 	@SuppressWarnings("unused")

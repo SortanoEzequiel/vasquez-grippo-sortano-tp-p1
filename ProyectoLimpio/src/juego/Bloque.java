@@ -2,27 +2,38 @@ package juego;
 
 import java.awt.Image;
 
+import entorno.Herramientas;
+
 public class Bloque {
 	private int x;
 	private int y;
 	private Image img;
 	
-	Bloque(Image imagen,int x,int y){
+	Bloque(int x,int y){
 		this.x=x;
 		this.y=y;
-		this.img=imagen;				
+		this.img=Herramientas.cargarImagen("imagenes/bloque1.jpg");		
 	}
+	
 	
 	public int getX() {
         return x;
     }
 	
 	public int getXder() {
-        return x+75;
+        return x+65;
     }
 	
 	public int getXizq() {
-        return x-75;
+        return x-65;
+    }
+	
+	public double getSup() {
+        return y-17.5;
+    }
+	
+	public double getInf() {
+        return y+17.5;
     }
 
     public int getY() {

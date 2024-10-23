@@ -43,11 +43,11 @@ public class Juego extends InterfaceJuego {
 	public void tick() {
 		// Procesamiento de un instante de tiempo
 		// ...
-		fondo = Herramientas.cargarImagen("imagenes/fondogame.jpg"); // cargamos la imagen de fondo
-		entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0); // la dibujamos.
+		fondo = Herramientas.cargarImagen("imagenes/skyhill.png"); // cargamos la imagen de fondo
+		entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0, 2.5); // la dibujamos.
 
-		Image casita = Herramientas.cargarImagen("imagenes/casita3.jpg");
-		entorno.dibujarImagen(casita, 400, 63, 0);
+		Image casita = Herramientas.cargarImagen("imagenes/house.png");
+		entorno.dibujarImagen(casita, 400, 68, 0, 0.1);
 
 		actualizarJuego();
 
@@ -55,50 +55,22 @@ public class Juego extends InterfaceJuego {
 
 	private void actualizarJuego() {
 
-		Image bloque = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque, 400, 100, 0);
-
-		Image bloque2 = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque2, 300, 200, 0);
-
-		Image bloque3 = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque3, 500, 200, 0);
-
-		Image bloque4 = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque4, 600, 300, 0);
-
-		Image bloque5 = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque5, 400, 300, 0);
-
-		Image bloque6 = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque6, 200, 300, 0);
-
-		Image bloque7 = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque7, 100, 400, 0);
-
-		Image bloque8 = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque8, 300, 400, 0);
-
-		Image bloque9 = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque9, 500, 400, 0);
-
-		Image bloque10 = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque10, 700, 400, 0);
-
-		Image bloque11 = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque11, 0, 500, 0);
-
-		Image bloque12 = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque12, 200, 500, 0);
-
-		Image bloque13 = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque13, 400, 500, 0);
-
-		Image bloque14 = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque14, 600, 500, 0);
-
-		Image bloque15 = Herramientas.cargarImagen("imagenes/bloque1.jpg");
-		entorno.dibujarImagen(bloque15, 800, 500, 0);
+		Image bloque = Herramientas.cargarImagen("imagenes/ground.png");
+		entorno.dibujarImagen(bloque, 400, 110, 0, 0.5);
+		entorno.dibujarImagen(bloque, 300, 200, 0, 0.5);
+		entorno.dibujarImagen(bloque, 500, 200, 0, 0.5);
+		entorno.dibujarImagen(bloque, 600, 300, 0, 0.5);
+		entorno.dibujarImagen(bloque, 400, 300, 0, 0.5);
+		entorno.dibujarImagen(bloque, 200, 300, 0, 0.5);
+		entorno.dibujarImagen(bloque, 100, 400, 0, 0.5);
+		entorno.dibujarImagen(bloque, 300, 400, 0, 0.5);
+		entorno.dibujarImagen(bloque, 500, 400, 0, 0.5);
+		entorno.dibujarImagen(bloque, 700, 400, 0, 0.5);
+		entorno.dibujarImagen(bloque, 0, 500, 0, 0.5);
+		entorno.dibujarImagen(bloque, 200, 500, 0, 0.5);
+		entorno.dibujarImagen(bloque, 400, 500, 0, 0.5);
+		entorno.dibujarImagen(bloque, 600, 500, 0, 0.5);
+		entorno.dibujarImagen(bloque, 800, 500, 0, 0.5);
 
 	}
 

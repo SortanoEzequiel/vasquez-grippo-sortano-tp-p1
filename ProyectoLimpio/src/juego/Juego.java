@@ -52,8 +52,7 @@ public class Juego extends InterfaceJuego
 				
 		bl.dibujarBloques(entorno);
 		
-		Bloque[] bloq = bl.getTotalBloques();
-		
+		Bloque[] bloq = bl.getTotalBloques();		
 		
 		
 		if (this.pep !=null){
@@ -62,35 +61,17 @@ public class Juego extends InterfaceJuego
 			
 			pep.dibujarPep(entorno, direccionPep);
 						
-			pepSobreBloques(bloq);
-						
-		}
-		
-
-	}
-	
-
-	
-	public void pepSobreBloques(Bloque[] bloq) {
-				
-		boolean enBloque=false;		
-					
-		for (int i=0;i<bloq.length;i++) {
-			if (pep.getBase()>= bloq[i].getSup() && pep.getDer()> bloq[i].getXizq() && pep.getIzq()<bloq[i].getXder() && pep.getBase()<bloq[i].getInf())
-				enBloque=true;
-		}
-		
-		if (pep.getTecho()>800) {
-			this.pep=null;
-		}else {
-			if (!enBloque) {
-				pep.caer();
-			}else {
-				pep.reiniciarSaltos();								
+			boolean pepNull = pep.pepSobreBloques(bloq);
+			
+			if (pepNull) {
+				this.pep=null;
+				System.out.println(pepNull);
 			}
+						
 		}		
-		
-	}
+
+	}	
+	
 	
 
 	

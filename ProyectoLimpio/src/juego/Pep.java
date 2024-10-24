@@ -77,6 +77,27 @@ public class Pep {
         return direccion;
     }	
 	
+	public boolean pepSobreBloques(Bloque[] bloq) {
+		
+		boolean enBloque=false;		
+					
+		for (int i=0;i<bloq.length;i++) {
+			if (getBase()>= bloq[i].getSup() && getDer()> bloq[i].getXizq() && getIzq()<bloq[i].getXder() && getBase()<bloq[i].getInf())
+				enBloque=true;
+		}
+		
+		if (getTecho()>800) {
+			return true;
+		}else {
+			if (!enBloque) {
+				caer();
+			}else {
+				reiniciarSaltos();								
+			}
+		}		
+		return false;
+	}
+	
 
 
 	public int getX() {

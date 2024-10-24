@@ -1,6 +1,5 @@
 package juego;
 
-import java.awt.Color;
 import entorno.Herramientas;
 import java.awt.Image;
 
@@ -14,15 +13,17 @@ public class Pep {
 	private Image pepDer;
 	private Image pepIzq;
 	private int saltosDisponibles;
+	private boolean direccion;
 	
 	Pep(){
 		this.x = 100;
 		this.y = 400;
 		this.ancho = 15;
 		this.alto = 37;
-		this.pepDer= Herramientas.cargarImagen("imagenes/pep.png");
-		this.pepIzq= Herramientas.cargarImagen("imagenes/pepRot.png");
+		this.pepDer= Herramientas.cargarImagen("imagenes/pep-der.png");
+		this.pepIzq= Herramientas.cargarImagen("imagenes/pep-izq.png");
 		this.saltosDisponibles=2;
+		this.direccion=true;
 	}
 	
 	public void moverDerecha()
@@ -35,16 +36,8 @@ public class Pep {
 		this.x = this.x - 3;
 	}
 	
-	/*public void dibujar(Entorno entorno)
-	{
-		entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0, Color.GREEN);
-	}
 	
-	public void dibujarImagen(Entorno entorno) {
-		entorno.dibujarImagen(image, x, getTecho(), 0,0.2);
-	}*/
-	
-	public void dibujarImagenEspejada(Entorno entorno, boolean direccion) {
+	public void dibujarPep(Entorno entorno, boolean direccion) {
 		if (direccion)
 			entorno.dibujarImagen(pepDer, x, getTecho(), 0,0.2);
 		else
@@ -52,7 +45,7 @@ public class Pep {
 	}
 	
 	public void caer() {
-		this.y=this.y+2;
+		this.y=this.y+3;
 	}
 	
 	
@@ -66,6 +59,23 @@ public class Pep {
 	public void reiniciarSaltos() {
 		this.saltosDisponibles=2;
 	}
+	
+	public boolean moverPep(Entorno entorno) {
+		
+        if (entorno.estaPresionada(entorno.TECLA_DERECHA)) {
+            moverDerecha();
+            direccion= true;
+        }
+        if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
+            moverIzquierda();
+            direccion= false;
+        }
+        if (entorno.sePresiono(entorno.TECLA_ARRIBA)) {        	
+        	saltar();
+        }
+        
+        return direccion;
+    }	
 	
 
 

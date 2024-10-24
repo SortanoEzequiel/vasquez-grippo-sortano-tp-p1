@@ -9,6 +9,7 @@ public class Bloque {
 	private int y;
 	private Image img;
 	
+	
 	Bloque(int x,int y){
 		this.x=x;
 		this.y=y;

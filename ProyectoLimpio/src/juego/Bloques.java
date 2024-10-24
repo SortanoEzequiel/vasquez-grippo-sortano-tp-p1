@@ -4,40 +4,73 @@ import entorno.Entorno;
 
 public class Bloques {
 	private Bloque[] totalBloques;
-	private int x;
-	private int x2;
-	private int x3;
-	private int x4;
-	private int y;
+	private int xPos;
+	private int yPos;
+	private int distPiso;
+	private int distBloque;
+	private int fila;
+	private int xPosInicial;
 	
 	
 	Bloques(){
 		this.totalBloques= new Bloque[10];
-		this.x=100;
-		this.x2=200;
-		this.x3=300;
-		this.x4=400;
-		this.y=525;		
-
+		
+		this.xPosInicial= 100;
+		this.xPos= xPosInicial;
+		this.yPos= 525;
+		this.distPiso=125;
+		this.distBloque=200;
+		this.fila=1;
+		
 		for (int i=0;i<totalBloques.length;i++) {
+			
+			
 			if (i<4) {
-				totalBloques[i]= new Bloque( this.x, this.y);
-				this.x+=200;
+				totalBloques[i]= new Bloque( this.xPos, this.yPos);
+				this.xPos+=distBloque;
+				if (this.fila==1) {
+					this.fila++;
+				}
+				if (i==3) {
+					this.xPos=xPosInicial*fila;
+				}
 			}
 			else if (i<7) {
-				this.y=400;
-				totalBloques[i]= new Bloque(this.x2, this.y);
-				this.x2+=200;
+				if (this.fila==2) {
+					this.yPos=this.yPos-distPiso;
+					this.fila++;
+				}
+				
+				totalBloques[i]= new Bloque(this.xPos, this.yPos);
+				
+				this.xPos+=distBloque;
+				
+				if (i==6) {
+					this.xPos=xPosInicial*fila;
+				}
 			}
 			else if (i<9) {
-				this.y=275;
-				totalBloques[i]= new Bloque(this.x3, this.y);
-				this.x3+=200;
-			}else
-				totalBloques[i]= new Bloque(this.x4, 150);
-			
+				if (this.fila==3) {
+					this.yPos=this.yPos-distPiso;
+					this.fila++;
+				}
+				
+				totalBloques[i]= new Bloque(this.xPos, this.yPos);
+				this.xPos+=distBloque;
+				
+				if (i==8) {
+					this.xPos=xPosInicial*fila;
+				}
+			}else {
+				if (this.fila==4) {
+					this.yPos=this.yPos-distPiso;
+					this.fila++;
+				}
+				totalBloques[i]= new Bloque(this.xPos, this.yPos);
+			}			
 		}
 	}
+	
 	
 	void dibujarBloques(Entorno entorno) {
 		for (int i=0;i<totalBloques.length;i++) {

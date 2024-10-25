@@ -82,7 +82,7 @@ public class Pep {
 		boolean enBloque=false;		
 					
 		for (int i=0;i<bloq.length;i++) {
-			if (getBase()>= bloq[i].getSup() && getDer()> bloq[i].getXizq() && getIzq()<bloq[i].getXder() && getBase()<bloq[i].getInf())
+			if (getBase()>= bloq[i].getSup() && getDer()> bloq[i].getXizq() && getIzq()<bloq[i].getXder() && getBase()<bloq[i].getSup()+5)
 				enBloque=true;
 		}
 		

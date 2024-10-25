@@ -21,6 +21,10 @@ public class Juego extends InterfaceJuego
 	private Bloques bl;
 	
 	private Pep pep;
+	
+	private Gnomo gnomo;
+	
+	private Gnomo[] gnomos;
 		
 	
 	
@@ -32,7 +36,15 @@ public class Juego extends InterfaceJuego
 		
 		this.bl = new Bloques();
 		
+		this.gnomo = new Gnomo();
+		
 		this.pep = new Pep(); // Creo a PEP
+		
+		this.gnomos= new Gnomo[4];
+		
+		for(int i = 0; i <this.gnomos.length; i++) {
+			gnomos[i] = new Gnomo();
+		}
 				
 		this.entorno.iniciar();// Inicia el juego!
 		
@@ -69,8 +81,14 @@ public class Juego extends InterfaceJuego
 			}
 						
 		}		
+		
+		gnomo.lanzarGnomo(entorno, gnomos, bloq);
 
 	}	
+	
+	
+    
+	
 	
 	
 

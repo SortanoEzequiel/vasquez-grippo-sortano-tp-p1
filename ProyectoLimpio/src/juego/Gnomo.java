@@ -12,6 +12,8 @@ public class Gnomo {
 	private int radio;
 	private int velocidad;
 	private boolean direccion;
+	public boolean seCayo;
+	public boolean esActivo;
 	
 	public Gnomo() {	
 		this.x = 400;
@@ -19,6 +21,8 @@ public class Gnomo {
 		this.radio = 30;
 		this.velocidad = 1;
 		this.direccion=inicioRandom();
+		this.seCayo=false;
+		this.esActivo=false;
 	}
 
 	public void caer()
@@ -26,25 +30,24 @@ public class Gnomo {
 		this.y = this.y + this.velocidad;
 	}
 	
+	public void activar() {
+		esActivo=true;		
+	}
+	
 	public boolean inicioRandom() {
 		Random random = new Random();
 		int randomInt = random.nextInt(2);
-	    System.out.println(randomInt);
 		if(randomInt == 0) {
-			moverIzquierda();
-			System.out.println("pasa");
 			return false;
 		}
-		moverDerecha();
 		return true;
-	}
+	}	
+	
 	
 	public boolean getDireccion() {
 		return direccion;
 	}
-	
-	
-		
+			
 	
 	
 	
@@ -57,115 +60,74 @@ public class Gnomo {
 	{
 		this.x = this.x + this.velocidad;
 	}
-	public void moverGnomo(){
-	    Random random = new Random();
-	    int randomInt = random.nextInt(2);
-	    System.out.println(randomInt);
-		if(randomInt == 0) {
-			this.moverIzquierda();
+	
+	
+	public void moverGnomo(Gnomo gnomo){
+				
+		if(gnomo.direccion) {
+			gnomo.moverDerecha();
+		}else {
+			gnomo.moverIzquierda();
 		}
-		this.moverDerecha();
+		
 	}
 	
 	public void dibujar(Entorno entorno)
 	{
-		Image gnomo = Herramientas.cargarImagen("imagenes/pep-der.png");
-		entorno.dibujarImagen(gnomo, this.x, this.y, 0, 0.1);
+		Image gnomo = Herramientas.cargarImagen("imagenes/gnomo.png");
+		entorno.dibujarImagen(gnomo, this.x, this.y, 0, 0.015);
 	}
 	
-	private boolean colisionBloqueGnomo(Gnomo gnomos, Bloque bloq)
-	{
-		boolean colisionX = bloq.getXizq()  < gnomos.getX() &&
-				            bloq.getXder()  > gnomos.getX();
-							
-		boolean colisionY = gnomos.getY() + gnomos.getRadio() == bloq.getY();
-							
-		return colisionX && colisionY;
-	}
 	
-private boolean bordeBloque(Gnomo gnomos,Bloque bloq) {
+	private boolean bordeBloque(Gnomo gnomos,Bloque bloq) {
 		
 		boolean bloque = gnomos.getX() <= bloq.getXizq() || gnomos.getX() >= bloq.getXder();
 		return bloque ;
 	}
 	
-	public void lanzarGnomo(Entorno entorno, Gnomo[] gnomos, Bloque[] bloq) {
-		for(int i = 0 ; i < gnomos.length; i++) {
-			gnomos[i].dibujar(entorno);
-			if (gnomos[i].getDireccion()) {
-				gnomos[i].moverDerecha();
-				if(bordeBloque(gnomos[i],bloq[9])) gnomos[i].caer();
-			}else {
-				gnomos[i].moverIzquierda();
-				if(bordeBloque(gnomos[i],bloq[9])) gnomos[i].caer();
-				System.out.println(gnomos[i].getX());
-			}
-			
-			
-			
-			if(colisionBloqueGnomo(gnomos[i], bloq[7])) {
-				gnomos[i].moverIzquierda();
-			}
-			if(bordeBloque(gnomos[i],bloq[7]) && gnomos[i].getY() + gnomos[i].getRadio()  >= 275 && gnomos[i].getY() + gnomos[i].getRadio()  < 400) gnomos[i].caer();
-			
-			if(colisionBloqueGnomo(gnomos[i], bloq[8])) {
-				gnomos[i].moverIzquierda();
-			}
-			if(bordeBloque(gnomos[i],bloq[8]) && gnomos[i].getY() + gnomos[i].getRadio()  >= 275 && gnomos[i].getY() + gnomos[i].getRadio()  < 400) gnomos[i].caer();
-			
-			if(colisionBloqueGnomo(gnomos[i], bloq[5])) {
-				gnomos[i].moverIzquierda();
-			}
-			if(bordeBloque(gnomos[i],bloq[5]) && gnomos[i].getY() + gnomos[i].getRadio()  >= 400 && gnomos[i].getY() + gnomos[i].getRadio()  < 525) gnomos[i].caer();
-			
-			if(colisionBloqueGnomo(gnomos[i], bloq[4])) {
-				gnomos[i].moverIzquierda();
-			}
-			if(bordeBloque(gnomos[i],bloq[4]) && gnomos[i].getY() + gnomos[i].getRadio()  >= 400 && gnomos[i].getY() + gnomos[i].getRadio()  < 525) gnomos[i].caer();
-			
-			if(colisionBloqueGnomo(gnomos[i], bloq[6])) {
-				gnomos[i].moverDerecha();
-			}
-			if(bordeBloque(gnomos[i],bloq[6]) && gnomos[i].getY() + gnomos[i].getRadio()  >= 400 && gnomos[i].getY() + gnomos[i].getRadio()  < 525) gnomos[i].caer();
-			
-			if(colisionBloqueGnomo(gnomos[i], bloq[3])) {
-				gnomos[i].moverDerecha();
-			}
-			if(bordeBloque(gnomos[i],bloq[3]) && gnomos[i].getY() + gnomos[i].getRadio()  >= 525) gnomos[i].caer();
-			
-			if(colisionBloqueGnomo(gnomos[i], bloq[2])) {
-				gnomos[i].moverIzquierda();
-			}
-			if(bordeBloque(gnomos[i],bloq[2]) && gnomos[i].getY() + gnomos[i].getRadio()  >= 525) gnomos[i].caer();
-			
-			if(colisionBloqueGnomo(gnomos[i], bloq[1])) {
-				gnomos[i].moverIzquierda();
-			}
-			if(bordeBloque(gnomos[i],bloq[1]) && gnomos[i].getY() + gnomos[i].getRadio()  >= 525) gnomos[i].caer();
-			
-			if(colisionBloqueGnomo(gnomos[i], bloq[0])) {
-				gnomos[i].moverIzquierda();
-			}
-			if(bordeBloque(gnomos[i],bloq[0]) && gnomos[i].getY() + gnomos[i].getRadio()  >= 525) gnomos[i].caer();
-			
-
+	private boolean enBloque(Gnomo gnomos,Bloque bloq) {
 		
-			
-			
-			
-			
-		
-			
-				
-			
-				
-					
-				
-				 
-    
-		   System.out.print(gnomos[i].getY() + gnomos[i].getRadio());
-	     }
+		boolean bloque = (gnomos.getY()+20) >= (bloq.getSup()) && (gnomos.getY()-30) < (bloq.getSup()) && gnomos.getX()> bloq.getXizq() && gnomos.getX()<bloq.getXder();
+		return bloque ;
 	}
+	
+	public void lanzarGnomo(Entorno entorno, Gnomo[] gnomo, Bloque[] bloq, int numGnomo) {
+		if (gnomo[numGnomo].esActivo) {
+			gnomo[numGnomo].dibujar(entorno);
+		}
+		
+		if (gnomo[numGnomo].seCayo==false) {
+			moverGnomo(gnomo[numGnomo]);
+			if(bordeBloque(gnomo[numGnomo],bloq[9])) {
+				gnomo[numGnomo].seCayo=true;
+				if (numGnomo<gnomo.length-1) {
+					gnomo[numGnomo+1].activar();
+				}else {
+					gnomo[numGnomo].activar();
+				}					
+			}
+			
+		}			
+		else {				
+				boolean enBloque = false;
+				for (int i=0;i<bloq.length-1;i++) {
+					if (enBloque(gnomo[numGnomo],bloq[i])){
+						enBloque=true;					
+					}
+				}
+				
+				if (gnomo[numGnomo].getY()>600) {
+					gnomo[numGnomo].esActivo=false;
+				}else if (!enBloque) {
+					gnomo[numGnomo].caer();
+					gnomo[numGnomo].direccion=inicioRandom();
+				}
+				else {
+					moverGnomo(gnomo[numGnomo]);
+				}
+			}					
+		}
+	  
 
 	public int getX() {
 		return x;

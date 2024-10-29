@@ -86,7 +86,7 @@ public class Pep {
 				enBloque=true;
 		}
 		
-		if (getTecho()>800) {
+		if (getTecho()>600) {
 			return true;
 		}else {
 			if (!enBloque) {

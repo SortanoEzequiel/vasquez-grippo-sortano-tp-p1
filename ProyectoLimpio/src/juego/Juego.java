@@ -4,6 +4,7 @@ package juego;
 
 import entorno.InterfaceJuego;
 
+import java.awt.Color;
 import java.awt.Image;
 import entorno.Herramientas;
 import entorno.Entorno;
@@ -18,14 +19,18 @@ public class Juego extends InterfaceJuego
 	// ...
 	private Image fondo;
 	
+	private Image casita;
+	
 	private Bloques bl;
+	
+	private Bloque[] bloq;
 	
 	private Pep pep;
 	
 	private Gnomo gnomo;
 	
 	private Gnomo[] gnomos;
-		
+				
 	
 	
 	Juego()
@@ -34,19 +39,27 @@ public class Juego extends InterfaceJuego
 
 		this.fondo = Herramientas.cargarImagen("imagenes/fondogame.jpg");
 		
+		this.casita= Herramientas.cargarImagen("imagenes/casita.png");		
+		
 		this.bl = new Bloques();
 		
 		this.gnomo = new Gnomo();
 		
 		this.pep = new Pep(); // Creo a PEP
 		
-		this.gnomos= new Gnomo[4];
+		this.gnomos= new Gnomo[5];
 		
 		for(int i = 0; i <this.gnomos.length; i++) {
 			gnomos[i] = new Gnomo();
 		}
 				
+		gnomos[0].activar();
+				
+		this.bloq = bl.getTotalBloques();	
+						
 		this.entorno.iniciar();// Inicia el juego!
+		
+		
 		
 	}
 
@@ -64,10 +77,11 @@ public class Juego extends InterfaceJuego
 				
 		bl.dibujarBloques(entorno);
 		
-		Bloque[] bloq = bl.getTotalBloques();		
+		entorno.dibujarImagen(casita, 400, 100, 0,0.11);
 		
 		
-		if (this.pep !=null){
+		if (this.pep != null){
+			
 			
 			boolean direccionPep= pep.moverPep(entorno);
 			
@@ -75,19 +89,31 @@ public class Juego extends InterfaceJuego
 						
 			boolean pepNull = pep.pepSobreBloques(bloq);
 			
+			for (int i=0;i<gnomos.length;i++) {
+				
+				if (gnomos[i].esActivo) { 
+					gnomo.lanzarGnomo(entorno, gnomos, bloq,i); //probar poner el booleano de si esta activo en gnomo.lanzargnomo(entorno, gnomos[0], bloq, ESACTIVO)
+				}
+				
+				/*entorno.dibujarCirculo(pep.getDer()+10, pep.getY(), 10, Color.green);
+				entorno.dibujarCirculo(gnomos[i].getX()-20, gnomos[i].getY(), 10, Color.red);				
+				entorno.dibujarCirculo(gnomos[i].getX()+20, gnomos[i].getY(), 10, Color.orange);	
+				entorno.dibujarCirculo(pep.getIzq()-15, pep.getY(), 10, Color.yellow);*/
+								
+				
+				
+				if ((pep.getDer()+10>=gnomos[i].getX()-20 && pep.getIzq()-15<=gnomos[i].getX()+20) && (gnomos[i].getY()> pep.getTecho()-30 && gnomos[i].getY()< pep.getTecho()+40)) {
+					gnomos[i].esActivo=false;
+
+				}
+				
+			}			
 			if (pepNull) {
 				this.pep=null;
 				System.out.println(pepNull);
-			}
-						
-		}		
-		
-		gnomo.lanzarGnomo(entorno, gnomos, bloq);
-
-	}	
-	
-	
-    
+			}								
+		}						
+	}
 	
 	
 	

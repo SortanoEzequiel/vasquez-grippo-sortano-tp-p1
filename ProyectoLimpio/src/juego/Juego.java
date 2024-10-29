@@ -3,10 +3,10 @@ package juego;
 import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
+import java.util.Random;
 import java.awt.Image;
-// import java.awt.Color;
+import java.awt.Color;
 // import java.awt.Font;
-// import java.util.Random;
 
 public class Juego extends InterfaceJuego {
 	private Entorno entorno;
@@ -25,6 +25,7 @@ public class Juego extends InterfaceJuego {
 	}
 
 	private void iniciarJuego() {
+		Random rand = new Random();
 		int[] xValues = { 400, 300, 500, 200, 400, 600, 100, 300, 500, 700, 0, 200, 400, 600, 800 };
 		int[] yValues = { 130, 220, 220, 320, 320, 320, 420, 420, 420, 420, 520, 520, 520, 520, 520 };
 		fondo = Herramientas.cargarImagen("imagenes/skyhill.jpg");
@@ -32,9 +33,13 @@ public class Juego extends InterfaceJuego {
 		pisosX = xValues;
 		pisosY = yValues;
 		pisos = new Piso[pisosX.length];
-		tortugas = new Tortuga[4];
+		tortugas = new Tortuga[100];
 		for (int i = 0; i < tortugas.length; i++) {
-			tortugas[i] = new Tortuga();
+			int num;
+			do {
+				num = rand.nextInt(800) + 1;
+			} while (400 - Piso.getAncho() / 2 < num && num < 400 + Piso.getAncho() / 2);
+			tortugas[i] = new Tortuga(num);
 		}
 	}
 
@@ -62,10 +67,10 @@ public class Juego extends InterfaceJuego {
 			for (int j = 0; j < this.tortugas.length; j++) {
 				if (TortugaSobrePiso(this.pisos[i], this.tortugas[j])) {
 					this.tortugas[j].setCayendo(false);
+					this.tortugas[j].mover();
 					if (tortugaPisaBorde(this.pisos[i], this.tortugas[j])) {
 						this.tortugas[j].rebotar();
 					}
-					this.tortugas[j].mover();
 				}
 			}
 		}
@@ -77,17 +82,17 @@ public class Juego extends InterfaceJuego {
 	}
 
 	private boolean TortugaSobrePiso(Piso piso, Tortuga tortuga) {
-		return colision(piso.getY(), tortuga.getY()) && piso.getX() - piso.getAncho() / 2 < tortuga.getX()
-				&& tortuga.getX() < piso.getX() + piso.getAncho() / 2;
+		return colision(piso.getY(), tortuga.getY()) && piso.getX() - Piso.getAncho() / 2 < tortuga.getX()
+				&& tortuga.getX() < piso.getX() + Piso.getAncho() / 2;
 	}
 
 	private boolean tortugaPisaBorde(Piso piso, Tortuga tortuga) {
-		return colision(tortuga.getX(), piso.getX() - piso.getAncho() / 2)
-				|| colision(tortuga.getX(), piso.getX() + piso.getAncho() / 2);
+		return colision(tortuga.getX(), piso.getX() - Piso.getAncho() / 2)
+				|| colision(tortuga.getX(), piso.getX() + Piso.getAncho() / 2);
 	}
 
 	private boolean colision(int a, int b) {
-		return Math.abs(a - b) <= 3;
+		return Math.abs(a - b) <= 3; 
 	}
 
 	@SuppressWarnings("unused")

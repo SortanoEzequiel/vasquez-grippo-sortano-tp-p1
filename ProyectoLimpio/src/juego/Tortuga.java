@@ -8,30 +8,19 @@ import java.util.Random;
 public class Tortuga {
   private int x;
   private int y;
-  private int alto;
-  private int ancho;
+  static private int alto = 44;
+  static private int ancho = 60;
   private int velocidad;
   private boolean cayendo = true;
   private Image turtleDer = Herramientas.cargarImagen("imagenes/turtle-der.png");
   private Image turtleIzq = Herramientas.cargarImagen("imagenes/turtle-izq.png");
 
-  public Tortuga() {
+  public Tortuga(int x) {
+    this.x = x;
     this.y = 20;
-    this.alto = 44;
-    this.ancho = 60;
     Random rand = new Random();
-    Piso piso = new Piso(400, 0);
-    int num = rand.nextInt(800) + 1;
-    if (400 - piso.getAncho() / 2 < num && num <= 400) {
-      this.x = num + piso.getAncho() + this.ancho / 2;
-    } else if (400 < num && num < 400 + piso.getAncho() / 2) {
-      this.x = num - piso.getAncho() - this.ancho / 2;
-    } else {
-      this.x = num;
-    }
-    piso = null;
     boolean bool = rand.nextBoolean();
-    num = rand.nextInt(3) + 1;
+    int num = rand.nextInt(3) + 2;
     if (bool) {
       this.velocidad = num;
     } else {
@@ -52,16 +41,20 @@ public class Tortuga {
     return y + (alto / 2);
   }
 
-  public int getAlto() {
+  static public int getAlto() {
     return alto;
   }
 
-  public int getAncho() {
+  static public int getAncho() {
     return ancho;
   }
 
   public boolean getCayendo() {
     return cayendo;
+  }
+
+  public int getVelocidad() {
+    return velocidad;
   }
 
   public void setCayendo(boolean cae) {
@@ -70,6 +63,7 @@ public class Tortuga {
 
   public void rebotar() {
     this.velocidad = this.velocidad * (-1);
+    this.x = this.x + this.velocidad;
   }
 
   public void mover() {

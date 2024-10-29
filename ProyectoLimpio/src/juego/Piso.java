@@ -7,15 +7,13 @@ import java.awt.Image;
 public class Piso {
   private int x;
   private int y;
-  private int alto;
-  private int ancho;
+  static private int alto = 38;
+  static private int ancho = 135;
   private Image bloque = Herramientas.cargarImagen("imagenes/ground.png");
 
   public Piso(int x, int y) {
     this.x = x;
     this.y = y;
-    this.alto = 38;
-    this.ancho = 135;
   }
 
   public void dibujar(Entorno entorno) {
@@ -30,11 +28,11 @@ public class Piso {
     return this.y + 3; // corrige la altura por la imagen
   }
 
-  public int getAlto() {
-    return this.alto;
+  static public int getAlto() {
+    return alto;
   }
 
-  public int getAncho() {
-    return this.ancho;
+  static public int getAncho() {
+    return ancho;
   }
 }

@@ -50,6 +50,7 @@ public class Pep {
 	
 	
 	public void saltar() {
+		
         if (this.saltosDisponibles > 0) {
             this.y -= (this.saltosDisponibles == 1) ? 150 : 70;
             saltosDisponibles--;
@@ -77,9 +78,12 @@ public class Pep {
         return direccion;
     }	
 	
+
+	
 	public boolean pepSobreBloques(Bloque[] bloq) {
 		
-		boolean enBloque=false;		
+		boolean enBloque=false;	
+		
 					
 		for (int i=0;i<bloq.length;i++) {
 			if (getBase()>= bloq[i].getSup() && getDer()> bloq[i].getXizq() && getIzq()<bloq[i].getXder() && getBase()<bloq[i].getSup()+5)
@@ -91,8 +95,8 @@ public class Pep {
 		}else {
 			if (!enBloque) {
 				caer();
-			}else {
-				reiniciarSaltos();								
+			}else {				
+				reiniciarSaltos();					
 			}
 		}		
 		return false;

@@ -14,7 +14,6 @@ public class Gnomo {
 	private boolean direccion;
 	public boolean seCayo;
 	public boolean esActivo;
-	public int cantActivos;
 	
 	public Gnomo() {	
 		this.x = 400;
@@ -24,7 +23,6 @@ public class Gnomo {
 		this.direccion=inicioRandom();
 		this.seCayo=false;
 		this.esActivo=false;
-		this.cantActivos=0;
 	}
 	
 	public void asignar(Gnomo[] gnomos){
@@ -104,14 +102,10 @@ public class Gnomo {
 					gnomo[numGnomo].seCayo=true;
 					if (numGnomo<gnomo.length-1) {
 						gnomo[numGnomo+1].activar();
-						cantActivos++;
-						System.out.println(cantActivos);
 					}else {
 						gnomo[numGnomo].activar();
-						cantActivos++;
 					}					
-				}
-				
+				}				
 			}			
 			else {				
 					boolean enBloque = false;
@@ -120,7 +114,9 @@ public class Gnomo {
 							enBloque=true;					
 						}
 					}
-
+					
+										
+					
 					if (!enBloque) {
 						gnomo[numGnomo].caer();
 						gnomo[numGnomo].direccion=inicioRandom();

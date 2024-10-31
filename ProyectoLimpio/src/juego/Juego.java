@@ -31,9 +31,10 @@ public class Juego extends InterfaceJuego
 	
 	private Gnomo[] gnomos;	
 	
-	private Tortuga tortuga;
 	
-	private int cantActivos;
+	private Tortuga[] tortugas;
+	
+	private int cantNull;
 				
 	
 	
@@ -55,9 +56,11 @@ public class Juego extends InterfaceJuego
 		
 		gnomo.asignar(gnomos);		
 		
-		this.tortuga = new Tortuga(400);
+		this.tortugas = new Tortuga[2];
 		
-		this.cantActivos=0;
+		tortugas[0] = new Tortuga(200);
+		
+		this.cantNull=0;
 				
 		this.bloq = bl.getTotalBloques();	
 						
@@ -83,9 +86,23 @@ public class Juego extends InterfaceJuego
 		
 		entorno.dibujarImagen(casita, 400, 100, 0,0.11);
 		
-		tortuga.dibujar(entorno);
+		
 		
 		if (this.pep != null){
+			
+			
+			tortugas[0].dibujar(entorno);
+			if (tortugas[0].getY()<=bloq[6].getSup())
+				tortugas[0].caer();
+			else {
+				if (tortugas[0].getX()>=bloq[4].getXizq() && tortugas[0].getX()<=bloq[4].getXder() ) {
+					tortugas[0].mover();
+				}
+					else {
+						tortugas[0].rebotar();
+						tortugas[0].mover();
+					}
+			}
 			
 			
 			boolean direccionPep= pep.moverPep(entorno);
@@ -95,27 +112,20 @@ public class Juego extends InterfaceJuego
 			boolean pepNull = pep.pepSobreBloques(bloq);
 			
 			for (int i=0;i<gnomos.length;i++) {
-				
+				if (i-cantNull<4)
 				if (gnomos[i]!=null) {
 					if (gnomos[i].esActivo ) { 
 						gnomo.lanzarGnomo(entorno, gnomos, bloq,i); //probar poner el booleano de si esta activo en gnomo.lanzargnomo(entorno, gnomos[0], bloq, ESACTIVO)
 					}
-					if (((pep.getDer()+10>=gnomos[i].getX()-20 && pep.getIzq()-15<=gnomos[i].getX()+20) && (gnomos[i].getY()> pep.getTecho()-30 && gnomos[i].getY()< pep.getTecho()+40)) && (pep.getTecho()-30>300) || gnomos[i].getY()>700) {
+					if (((pep.getDer()+10>=gnomos[i].getX()-20 && pep.getIzq()-15<=gnomos[i].getX()+20) && (gnomos[i].getY()> pep.getTecho()-30 && gnomos[i].getY()< pep.getTecho()+40)) && (pep.getTecho()-30>300) || gnomos[i].getY()>600 || tortugas[0].getX()==gnomos[i].getX()) {
 						gnomos[i]=null;
-						System.out.println(cantActivos);
+						cantNull++;
 					}
-				}
-				
-				
+				}				
 				/*entorno.dibujarCirculo(pep.getDer()+10, pep.getY(), 10, Color.green);
 				entorno.dibujarCirculo(gnomos[i].getX()-20, gnomos[i].getY(), 10, Color.red);				
 				entorno.dibujarCirculo(gnomos[i].getX()+20, gnomos[i].getY(), 10, Color.orange);	
 				entorno.dibujarCirculo(pep.getIzq()-15, pep.getY(), 10, Color.yellow);*/
-								
-				
-				
-				
-				
 			}	
 			
 			
@@ -126,8 +136,6 @@ public class Juego extends InterfaceJuego
 			}								
 		}						
 	}
-	
-	
 	
 
 	

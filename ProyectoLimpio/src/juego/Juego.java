@@ -29,7 +29,11 @@ public class Juego extends InterfaceJuego
 	
 	private Gnomo gnomo;
 	
-	private Gnomo[] gnomos;
+	private Gnomo[] gnomos;	
+	
+	private Tortuga tortuga;
+	
+	private int cantActivos;
 				
 	
 	
@@ -47,13 +51,13 @@ public class Juego extends InterfaceJuego
 		
 		this.pep = new Pep(); // Creo a PEP
 		
-		this.gnomos= new Gnomo[5];
+		this.gnomos= new Gnomo[30];
 		
-		for(int i = 0; i <this.gnomos.length; i++) {
-			gnomos[i] = new Gnomo();
-		}
-				
-		gnomos[0].activar();
+		gnomo.asignar(gnomos);		
+		
+		this.tortuga = new Tortuga(400);
+		
+		this.cantActivos=0;
 				
 		this.bloq = bl.getTotalBloques();	
 						
@@ -79,6 +83,7 @@ public class Juego extends InterfaceJuego
 		
 		entorno.dibujarImagen(casita, 400, 100, 0,0.11);
 		
+		tortuga.dibujar(entorno);
 		
 		if (this.pep != null){
 			
@@ -91,9 +96,16 @@ public class Juego extends InterfaceJuego
 			
 			for (int i=0;i<gnomos.length;i++) {
 				
-				if (gnomos[i].esActivo) { 
-					gnomo.lanzarGnomo(entorno, gnomos, bloq,i); //probar poner el booleano de si esta activo en gnomo.lanzargnomo(entorno, gnomos[0], bloq, ESACTIVO)
+				if (gnomos[i]!=null) {
+					if (gnomos[i].esActivo ) { 
+						gnomo.lanzarGnomo(entorno, gnomos, bloq,i); //probar poner el booleano de si esta activo en gnomo.lanzargnomo(entorno, gnomos[0], bloq, ESACTIVO)
+					}
+					if (((pep.getDer()+10>=gnomos[i].getX()-20 && pep.getIzq()-15<=gnomos[i].getX()+20) && (gnomos[i].getY()> pep.getTecho()-30 && gnomos[i].getY()< pep.getTecho()+40)) && (pep.getTecho()-30>300) || gnomos[i].getY()>700) {
+						gnomos[i]=null;
+						System.out.println(cantActivos);
+					}
 				}
+				
 				
 				/*entorno.dibujarCirculo(pep.getDer()+10, pep.getY(), 10, Color.green);
 				entorno.dibujarCirculo(gnomos[i].getX()-20, gnomos[i].getY(), 10, Color.red);				
@@ -102,12 +114,12 @@ public class Juego extends InterfaceJuego
 								
 				
 				
-				if ((pep.getDer()+10>=gnomos[i].getX()-20 && pep.getIzq()-15<=gnomos[i].getX()+20) && (gnomos[i].getY()> pep.getTecho()-30 && gnomos[i].getY()< pep.getTecho()+40)) {
-					gnomos[i].esActivo=false;
-
-				}
 				
-			}			
+				
+			}	
+			
+			
+			
 			if (pepNull) {
 				this.pep=null;
 				System.out.println(pepNull);

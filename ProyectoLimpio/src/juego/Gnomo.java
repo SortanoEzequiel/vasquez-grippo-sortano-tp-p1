@@ -14,6 +14,7 @@ public class Gnomo {
 	private boolean direccion;
 	public boolean seCayo;
 	public boolean esActivo;
+	public int cantActivos;
 	
 	public Gnomo() {	
 		this.x = 400;
@@ -23,6 +24,14 @@ public class Gnomo {
 		this.direccion=inicioRandom();
 		this.seCayo=false;
 		this.esActivo=false;
+		this.cantActivos=0;
+	}
+	
+	public void asignar(Gnomo[] gnomos){
+		for(int i = 0; i <gnomos.length; i++) {
+			gnomos[i] = new Gnomo();
+		}
+		gnomos[0].activar();
 	}
 
 	public void caer()
@@ -79,12 +88,6 @@ public class Gnomo {
 	}
 	
 	
-	private boolean bordeBloque(Gnomo gnomos,Bloque bloq) {
-		
-		boolean bloque = gnomos.getX() <= bloq.getXizq() || gnomos.getX() >= bloq.getXder();
-		return bloque ;
-	}
-	
 	private boolean enBloque(Gnomo gnomos,Bloque bloq) {
 		
 		boolean bloque = (gnomos.getY()+20) >= (bloq.getSup()) && (gnomos.getY()-30) < (bloq.getSup()) && gnomos.getX()> bloq.getXizq() && gnomos.getX()<bloq.getXder();
@@ -92,40 +95,40 @@ public class Gnomo {
 	}
 	
 	public void lanzarGnomo(Entorno entorno, Gnomo[] gnomo, Bloque[] bloq, int numGnomo) {
-		if (gnomo[numGnomo].esActivo) {
-			gnomo[numGnomo].dibujar(entorno);
-		}
-		
-		if (gnomo[numGnomo].seCayo==false) {
-			moverGnomo(gnomo[numGnomo]);
-			if(bordeBloque(gnomo[numGnomo],bloq[9])) {
-				gnomo[numGnomo].seCayo=true;
-				if (numGnomo<gnomo.length-1) {
-					gnomo[numGnomo+1].activar();
-				}else {
-					gnomo[numGnomo].activar();
-				}					
-			}
+
+			gnomo[numGnomo].dibujar(entorno);			
 			
-		}			
-		else {				
-				boolean enBloque = false;
-				for (int i=0;i<bloq.length-1;i++) {
-					if (enBloque(gnomo[numGnomo],bloq[i])){
-						enBloque=true;					
-					}
+			if (gnomo[numGnomo].seCayo==false) {
+				moverGnomo(gnomo[numGnomo]);
+				if(!enBloque(gnomo[numGnomo],bloq[9])) {
+					gnomo[numGnomo].seCayo=true;
+					if (numGnomo<gnomo.length-1) {
+						gnomo[numGnomo+1].activar();
+						cantActivos++;
+						System.out.println(cantActivos);
+					}else {
+						gnomo[numGnomo].activar();
+						cantActivos++;
+					}					
 				}
 				
-				if (gnomo[numGnomo].getY()>600) {
-					gnomo[numGnomo].esActivo=false;
-				}else if (!enBloque) {
-					gnomo[numGnomo].caer();
-					gnomo[numGnomo].direccion=inicioRandom();
-				}
-				else {
-					moverGnomo(gnomo[numGnomo]);
-				}
-			}					
+			}			
+			else {				
+					boolean enBloque = false;
+					for (int i=0;i<bloq.length-1;i++) {
+						if (enBloque(gnomo[numGnomo],bloq[i])){
+							enBloque=true;					
+						}
+					}
+
+					if (!enBloque) {
+						gnomo[numGnomo].caer();
+						gnomo[numGnomo].direccion=inicioRandom();
+					}
+					else {
+						moverGnomo(gnomo[numGnomo]);
+					}
+				}	
 		}
 	  
 

@@ -8,18 +8,15 @@ import entorno.Entorno;
 public class Pep {
 	private int x;
 	private int y;
-	private int alto;
-	private int ancho;
 	private Image pepDer;
 	private Image pepIzq;
 	private int saltosDisponibles;
 	private boolean direccion;
 	
+	
 	Pep(){
 		this.x = 100;
 		this.y = 400;
-		this.ancho = 15;
-		this.alto = 37;
 		this.pepDer= Herramientas.cargarImagen("imagenes/pep-der.png");
 		this.pepIzq= Herramientas.cargarImagen("imagenes/pep-izq.png");
 		this.saltosDisponibles=2;
@@ -39,9 +36,9 @@ public class Pep {
 	
 	public void dibujarPep(Entorno entorno, boolean direccion) {
 		if (direccion)
-			entorno.dibujarImagen(pepDer, x, getTecho(), 0,0.2);
+			entorno.dibujarImagen(pepDer, x, y, 0,0.2); //modificar 
 		else
-			entorno.dibujarImagen(pepIzq, x, getTecho(), 0,0.2);
+			entorno.dibujarImagen(pepIzq, x, y, 0,0.2); //modificar getaltura
 	}
 	
 	public void caer() {
@@ -79,29 +76,7 @@ public class Pep {
     }	
 	
 
-	
-	public boolean pepSobreBloques(Bloque[] bloq) {
 		
-		boolean enBloque=false;	
-		
-					
-		for (int i=0;i<bloq.length;i++) {
-			if (getBase()>= bloq[i].getSup() && getDer()> bloq[i].getXizq() && getIzq()<bloq[i].getXder() && getBase()<bloq[i].getSup()+5)
-				enBloque=true;
-		}
-		
-		if (getTecho()>600) {
-			return true;
-		}else {
-			if (!enBloque) {
-				caer();
-			}else {				
-				reiniciarSaltos();					
-			}
-		}		
-		return false;
-	}
-	
 
 
 	public int getX() {
@@ -113,29 +88,19 @@ public class Pep {
 		return y;
 	}
 	
-	public int getDer() {
-		return x+(ancho/2);
+	public int getExtremoDer() {
+		return x+15;
 	}
 	
-	public int getIzq() {
-		return x-(ancho/2);
+	public int getExtremoIzq() {
+		return x-20;
 	}
 	
-	public int getBase() {
-		return y+(alto/2);
+	public int getYBase() {
+		return y+38;
 	}
 	
-	public int getTecho() {
-		return y-(alto/2);
-	}
-
-
-	public int getAncho() {
-		return ancho;
-	}
-
-
-	public int getAlto() {
-		return alto;
+	public int getYAltura() {
+		return y-30;
 	}
 }

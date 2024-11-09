@@ -40,8 +40,10 @@ public class Bloque {
     public int getY() {
         return y;
     }
-
+    
     public Image getImg() {
-        return img;
+    	return img;
     }
+
+    
 }

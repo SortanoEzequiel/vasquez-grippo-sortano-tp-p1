@@ -11,13 +11,13 @@ public class Gnomo {
 	private int y;
 	private int radio;
 	private int velocidad;
-	private boolean direccion;
+	public boolean direccion;
 	public boolean seCayo;
 	public boolean esActivo;
 	
 	public Gnomo() {	
 		this.x = 400;
-		this.y = 118;
+		this.y = 130-17;
 		this.radio = 30;
 		this.velocidad = 1;
 		this.direccion=inicioRandom();
@@ -82,50 +82,9 @@ public class Gnomo {
 	public void dibujar(Entorno entorno)
 	{
 		Image gnomo = Herramientas.cargarImagen("imagenes/gnomo.png");
-		entorno.dibujarImagen(gnomo, this.x, this.y, 0, 0.015);
+		entorno.dibujarImagen(gnomo, x, y, 0, 0.015);
 	}
-	
-	
-	private boolean enBloque(Gnomo gnomos,Bloque bloq) {
 		
-		boolean bloque = (gnomos.getY()+20) >= (bloq.getSup()) && (gnomos.getY()-30) < (bloq.getSup()) && gnomos.getX()> bloq.getXizq() && gnomos.getX()<bloq.getXder();
-		return bloque ;
-	}
-	
-	public void lanzarGnomo(Entorno entorno, Gnomo[] gnomo, Bloque[] bloq, int numGnomo) {
-
-			gnomo[numGnomo].dibujar(entorno);			
-			
-			if (gnomo[numGnomo].seCayo==false) {
-				moverGnomo(gnomo[numGnomo]);
-				if(!enBloque(gnomo[numGnomo],bloq[9])) {
-					gnomo[numGnomo].seCayo=true;
-					if (numGnomo<gnomo.length-1) {
-						gnomo[numGnomo+1].activar();
-					}else {
-						gnomo[numGnomo].activar();
-					}					
-				}				
-			}			
-			else {				
-					boolean enBloque = false;
-					for (int i=0;i<bloq.length-1;i++) {
-						if (enBloque(gnomo[numGnomo],bloq[i])){
-							enBloque=true;					
-						}
-					}
-					
-										
-					
-					if (!enBloque) {
-						gnomo[numGnomo].caer();
-						gnomo[numGnomo].direccion=inicioRandom();
-					}
-					else {
-						moverGnomo(gnomo[numGnomo]);
-					}
-				}	
-		}
 	  
 
 	public int getX() {
@@ -138,6 +97,22 @@ public class Gnomo {
 	
 	public int getRadio() {
 		return radio;
+	}
+	
+	public int getExtremoDer() {
+		return x;
+	}
+	
+	public int getExtremoIzq() {
+		return x;
+	}
+	
+	public int getYBase() {
+		return y+20; //modificar para la base
+	}
+	
+	public int getYAltura() {
+		return y-20;
 	}
 
 	

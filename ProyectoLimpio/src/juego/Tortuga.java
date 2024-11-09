@@ -2,6 +2,8 @@ package juego;
 
 import entorno.Entorno;
 import entorno.Herramientas;
+
+import java.awt.Color;
 import java.awt.Image;
 import java.util.Random;
 
@@ -20,7 +22,7 @@ public class Tortuga {
 	    this.y = 20;
 	    Random rand = new Random();
 	    boolean bool = rand.nextBoolean();
-	    int num = rand.nextInt(3) + 2;
+	    int num = rand.nextInt(3) + 1;
 	    if (bool) {
 	      this.velocidad = num;
 	    } else {
@@ -31,6 +33,10 @@ public class Tortuga {
 	  public void dibujar(Entorno entorno) {
 	    Image turtle = this.velocidad > 0 ? turtleDer : turtleIzq;
 	    entorno.dibujarImagen(turtle, x, y, 0, 0.1);
+	    entorno.dibujarCirculo(x, y+20, 10, Color.green);
+	    entorno.dibujarCirculo(x, y-20, 10, Color.green);
+	    entorno.dibujarCirculo(x+25, y, 10, Color.green);
+	    entorno.dibujarCirculo(x-25, y, 10, Color.green);
 	  }
 
 	  public int getX() {
@@ -73,4 +79,22 @@ public class Tortuga {
 	  public void caer() {
 	    this.y = this.y + 2;
 	  }
+	  
+	  public int getYBase() {
+		  return y+20;
+	  }
+	  
+	  public int getYAltura() {
+		  return y-20;
+	  }
+	  
+	  public int getExtremoDer() {
+			return x+25;
+	  }
+	  
+	  public int getExtremoIzq() {
+		  return x-25;
+	  }
+		
+
 }

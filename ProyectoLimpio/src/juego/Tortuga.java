@@ -16,6 +16,7 @@ public class Tortuga {
 	  private boolean cayendo = true;
 	  private Image turtleDer = Herramientas.cargarImagen("imagenes/turtle-der.png");
 	  private Image turtleIzq = Herramientas.cargarImagen("imagenes/turtle-izq.png");
+	  public boolean sobreBloque = false;
 
 	  public Tortuga(int x) {
 	    this.x = x;
@@ -32,11 +33,7 @@ public class Tortuga {
 
 	  public void dibujar(Entorno entorno) {
 	    Image turtle = this.velocidad > 0 ? turtleDer : turtleIzq;
-	    entorno.dibujarImagen(turtle, x, y, 0, 0.1);
-	    entorno.dibujarCirculo(x, y+20, 10, Color.green);
-	    entorno.dibujarCirculo(x, y-20, 10, Color.green);
-	    entorno.dibujarCirculo(x+25, y, 10, Color.green);
-	    entorno.dibujarCirculo(x-25, y, 10, Color.green);
+	    entorno.dibujarImagen(turtle, x, y, 0, 0.1);	    
 	  }
 
 	  public int getX() {

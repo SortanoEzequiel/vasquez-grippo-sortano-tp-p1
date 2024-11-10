@@ -1,5 +1,6 @@
 package juego;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.util.Random;
 
@@ -100,11 +101,11 @@ public class Gnomo {
 	}
 	
 	public int getExtremoDer() {
-		return x;
+		return x+15;
 	}
 	
 	public int getExtremoIzq() {
-		return x;
+		return x-15;
 	}
 	
 	public int getYBase() {
@@ -113,6 +114,10 @@ public class Gnomo {
 	
 	public int getYAltura() {
 		return y-20;
+	}
+	
+	public int getVelocidad() {
+		return velocidad;
 	}
 
 	

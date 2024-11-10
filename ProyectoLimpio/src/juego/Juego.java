@@ -33,7 +33,7 @@ public class Juego extends InterfaceJuego
 	
 	
 	private Tortuga[] tortugas;
-	
+		
 	private DisparoPep disparoPep;
 	
 	private int cantNull;
@@ -42,7 +42,10 @@ public class Juego extends InterfaceJuego
 				
 	private int gnomosPerdidos;
 	
-	private int tiempo;
+	public int posX;
+	
+	private int tiempo;	
+	
 	
 	
 	Juego()
@@ -68,14 +71,11 @@ public class Juego extends InterfaceJuego
 		
 		gnomo.asignar(gnomos);		
 		
-		this.tortugas = new Tortuga[5];
+		this.tortugas = new Tortuga[30];		
 		
-		int posX=100;
-		for (int i=0;i<tortugas.length;i++) {
-			
-			tortugas[i]=new Tortuga(posX);
-			posX+=150;
-		}
+		
+		tortugas[0]=new Tortuga();
+		tortugas[0].activar=true;
 		
 		this.cantNull=0;
 				
@@ -107,19 +107,32 @@ public class Juego extends InterfaceJuego
 		
 		
 		if (this.pep != null){
+
 			for (int t = 0; t < tortugas.length; t++) {
 				boolean enBloque=false;
 				
-				if (tortugas[t] != null) {
-					tortugas[t].dibujar(entorno);
-					
+				if (tortugas[t] != null ) {
+					if (tortugas[t].activar==true) {
+						tortugas[t].dibujar(entorno);
+					}
+										
 					if (tortugas[t].getYBase()>300) {
 						if (tortugaSobreBloque(tortugas[t])) {
 							enBloque = true;
 							tortugas[t].sobreBloque = true;
+							if (t<tortugas.length-1) {
+								if (tortugas[t+1]==null) {
+									
+																		
+									tortugas[t+1]=new Tortuga();
+									tortugas[t+1].activar=true;							
+								}
+							}
+							
+							
 						}
-
 						if (enBloque) {
+							
 							tortugas[t].mover();
 						} else if (tortugas[t].sobreBloque) {
 							tortugas[t].rebotar();
@@ -145,6 +158,8 @@ public class Juego extends InterfaceJuego
 						tortugas[t] = null;
 						disparoPep = null;
 					}
+				}else {
+					
 				}
 			}
 				

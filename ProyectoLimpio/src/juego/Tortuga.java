@@ -17,9 +17,10 @@ public class Tortuga {
 	  private Image turtleDer = Herramientas.cargarImagen("imagenes/turtle-der.png");
 	  private Image turtleIzq = Herramientas.cargarImagen("imagenes/turtle-izq.png");
 	  public boolean sobreBloque = false;
+	  public boolean activar=false;
 
-	  public Tortuga(int x) {
-	    this.x = x;
+	  public Tortuga() {
+	    this.x = randomX(posicionUtilizada);
 	    this.y = 20;
 	    Random rand = new Random();
 	    boolean bool = rand.nextBoolean();
@@ -29,6 +30,36 @@ public class Tortuga {
 	    } else {
 	      this.velocidad = -1 * num;
 	    }
+	  }
+	  
+	  public int[] posicionUtilizada = new int[7];
+	  
+	  public int randomX(int[] posicionUtilizada) {
+		  int[] posicion = new int[7];
+		  int posInicial = 100;
+		  
+		  Random r = new Random();
+		  
+		  for (int i=0; i<posicion.length;i++) {
+			  posicion[i]=posInicial;
+			  posInicial+=100;
+			  System.out.println(posicion[i]);
+		  }
+		  
+		  int posRandom = r.nextInt(posicion.length);
+
+		  for (int pos = 0; pos < posicionUtilizada.length; pos++) {
+			  
+		        posRandom = r.nextInt(posicion.length);
+
+		        // Si la posición no ha sido utilizada, la seleccionamos y la marcamos
+		        if (posicionUtilizada[pos]!=posicion[posRandom]) {
+		            posicionUtilizada[posRandom] = posicion[posRandom];  // Marcamos la posición como utilizada
+		            break;  // Salimos del bucle una vez que encontramos una posición válida
+		        }
+		  }
+		  return posicionUtilizada[posRandom];
+		  
 	  }
 
 	  public void dibujar(Entorno entorno) {

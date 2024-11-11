@@ -20,7 +20,7 @@ public class Gnomo {
 		this.x = 400;
 		this.y = 130-17;
 		this.radio = 30;
-		this.velocidad = 1;
+		this.velocidad = 2;
 		this.direccion=inicioRandom();
 		this.seCayo=false;
 		this.esActivo=false;

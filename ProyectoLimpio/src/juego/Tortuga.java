@@ -105,7 +105,7 @@ public class Tortuga {
 	  }
 
 	  public void caer() {
-	    this.y = this.y + 2;
+	    this.y = this.y + 3;
 	  }
 	  
 	  public int getYBase() {

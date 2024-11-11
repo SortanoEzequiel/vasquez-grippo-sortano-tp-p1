@@ -60,15 +60,15 @@ public class Pep {
 	
 	public boolean moverPep(Entorno entorno) {
 		
-        if (entorno.estaPresionada(entorno.TECLA_DERECHA)) {
+        if (entorno.estaPresionada(entorno.TECLA_DERECHA) || entorno.estaPresionada('d')) {
             moverDerecha();
             direccion= true;
         }
-        if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
+        if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada('a')) {
             moverIzquierda();
             direccion= false;
         }
-        if (entorno.sePresiono(entorno.TECLA_ARRIBA)) {        	
+        if (entorno.sePresiono(entorno.TECLA_ARRIBA) || entorno.sePresiono('w')) {        	
         	saltar();
         }
         

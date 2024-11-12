@@ -74,7 +74,7 @@ public class Bloques {
 	
 	void dibujarBloques(Entorno entorno) {
 		for (int i=0;i<totalBloques.length;i++) {
-			entorno.dibujarImagen(totalBloques[i].getImg(),totalBloques[i].getX(),totalBloques[i].getY(), 0);			
+			entorno.dibujarImagen(totalBloques[i].getImg(),totalBloques[i].getX(),totalBloques[i].getY(), 0,0.4);			
 		}		
 	}
 	

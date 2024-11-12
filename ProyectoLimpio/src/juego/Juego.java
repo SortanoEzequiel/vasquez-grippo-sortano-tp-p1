@@ -6,6 +6,10 @@ import entorno.InterfaceJuego;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Random;
+
 import entorno.Herramientas;
 import entorno.Entorno;
 
@@ -54,6 +58,8 @@ public class Juego extends InterfaceJuego
 	
 	boolean ganador=false;
 	
+	public int[] posicionUtilizada = new int[7];
+	
 	Juego()
 	{
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);		
@@ -74,13 +80,10 @@ public class Juego extends InterfaceJuego
 		
 		this.pep = new Pep(); // Creo a PEP
 		
-		this.gnomos= new Gnomo[4];
-		
+		this.gnomos= new Gnomo[4];		
 		gnomo.asignar(gnomos);		
 		
-		this.tortugas = new Tortuga[3];		
-		
-		
+		this.tortugas = new Tortuga[3];
 		tortugas[0]=new Tortuga();
 		tortugas[0].activar=true;
 		
@@ -88,7 +91,7 @@ public class Juego extends InterfaceJuego
 		
 		this.juegoGanado=15;
 		
-		this.juegoPerdido=10;
+		this.juegoPerdido=100;
 				
 		this.bloq = bl.getTotalBloques();	
 						
@@ -129,54 +132,63 @@ public class Juego extends InterfaceJuego
 			boolean pepNull = pepSobreBloques(bloq);
 
 			//ESTRUCTURA DE TORTUGAS
-			for (int t = 0; t < tortugas.length; t++) {
-				boolean enBloque=false;
-				
-				if (tortugas[t] != null ) {
-					if (tortugas[t].activar==true) {
-						tortugas[t].dibujar(entorno);
-					}
-										
-					if (tortugas[t].getYBase()>300) {
-						if (tortugaSobreBloque(tortugas[t])) {
-							enBloque = true;
-							tortugas[t].sobreBloque = true;
-							if (t<tortugas.length-1) {
-								if (tortugas[t+1]==null) {									
-																		
-									tortugas[t+1]=new Tortuga();
-									tortugas[t+1].activar=true;							
-								}
-							}
-							
-							
-						}
-						if (enBloque) {
-							
-							tortugas[t].mover();
-						} else if (tortugas[t].sobreBloque) {
-							tortugas[t].rebotar();
-						} else {
-							tortugas[t].caer();
-						}
-					}else {
-						tortugas[t].caer();
-					}
+			ArrayList<Integer> posiciones = new ArrayList<>();
 
-					if (disparoPep != null && tortugas[t] != null
-							&& (tortugas[t].getExtremoDer() >= disparoPep.getX()
-									&& tortugas[t].getExtremoIzq() <= disparoPep.getX()
-									&& tortugas[t].getYBase() >= disparoPep.getY()
-									&& tortugas[t].getYAltura() <= disparoPep.getY())) {
-						tortugas[t] = null;
-						disparoPep = null;
-						tortugaEliminada++;
-					}
-				}else {
-					tortugas[t]=new Tortuga();
-					tortugas[t].activar=true;
-				}
-			}					
+			for (int t = 0; t < tortugas.length; t++) {
+			    boolean enBloque = false;
+
+			    if (tortugas[t] != null) {
+			        if (!posiciones.contains(Integer.valueOf(tortugas[t].getPosInicial()))) {
+
+			            if (tortugas[t].activar) {
+			                tortugas[t].dibujar(entorno);
+			                posiciones.add(Integer.valueOf(tortugas[t].getPosInicial()));
+			            }
+
+			            if (tortugas[t].getYBase() > 300) {
+			                if (tortugaSobreBloque(tortugas[t])) {
+			                    enBloque = true;
+			                    tortugas[t].sobreBloque = true;
+			                    if (t < tortugas.length - 1) {
+			                        if (tortugas[t+1] == null) {
+			                            tortugas[t+1] = new Tortuga();
+			                            tortugas[t+1].activar = true;
+			                        }
+			                    }
+			                }
+
+			                if (enBloque) {
+			                    tortugas[t].mover();
+			                } else if (tortugas[t].sobreBloque) {
+			                    tortugas[t].rebotar();
+			                } else {
+			                    tortugas[t].caer();
+			                }
+			            } else {
+			                tortugas[t].caer();
+			            }
+
+			            if (disparoPep != null && tortugas[t] != null
+			                    && (tortugas[t].getExtremoDer() >= disparoPep.getX()
+			                    && tortugas[t].getExtremoIzq() <= disparoPep.getX()
+			                    && tortugas[t].getYBase() >= disparoPep.getY()
+			                    && tortugas[t].getYAltura() <= disparoPep.getY())) {
+			            	posiciones.remove(Integer.valueOf(tortugas[t].getPosInicial()));
+			                tortugas[t] = null;
+			                disparoPep = null;
+			                tortugaEliminada++;
+			            }
+			        } else {
+			        	tortugas[t]=null;
+			        }
+			    } else {			    	
+			        tortugas[t] = new Tortuga();
+			        tortugas[t].activar = true;
+			    }
+			}
+			
+			
+				
 			
 			
 			//ESTRUCTURA DE GNOMOS
@@ -189,12 +201,13 @@ public class Juego extends InterfaceJuego
 						}
 						if (((pep.getExtremoDer()>=gnomos[i].getExtremoIzq() && pep.getExtremoIzq()<=gnomos[i].getExtremoDer()) && (pep.getYBase() >= gnomos[i].getY()  && pep.getYAltura() <= gnomos[i].getY() )) && (pep.getYAltura()>=300)) {
 							gnomos[i]=null;
-							System.out.println("gnomo "+i+" es null");
+							System.out.println("gnomo salvado");
 							cantNull++;
 							gnomosRescatados++;
 							System.out.println(cantNull);
 						}else if(gnomos[i].getY()>600) {
 							gnomos[i]=null;
+							System.out.println("gnomo perdido");
 							cantNull++;
 							gnomosPerdidos++;
 						}else {
@@ -203,8 +216,7 @@ public class Juego extends InterfaceJuego
 				            	if (tortugas[t]!=null && tortugas[t].getYBase()>300) {
 				            		if (tortugas[t].getExtremoDer()>gnomos[i].getX() && tortugas[t].getExtremoIzq() < gnomos[i].getX() && tortugas[t].getYBase()>gnomos[i].getY() && tortugas[t].getYAltura()<gnomos[i].getY()) {
 					                    colisionConTortuga = true;
-					                    System.out.println(colisionConTortuga);
-					                    
+										System.out.println("gnomo perdido");					                    
 					                }
 					                
 					                if((tortugas[t].getExtremoDer()>=pep.getX() && tortugas[t].getExtremoIzq() <= pep.getX() && tortugas[t].getYBase()>=pep.getY() && tortugas[t].getYAltura()<=pep.getY())) {
@@ -367,7 +379,8 @@ public class Juego extends InterfaceJuego
 					gnomo[numGnomo].moverGnomo(gnomo[numGnomo]);
 				}
 			}	
-	}
+	}	
+	
 
 	
 	

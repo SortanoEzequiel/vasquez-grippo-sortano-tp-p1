@@ -3,13 +3,13 @@ package juego;
 import entorno.Entorno;
 import entorno.Herramientas;
 
-import java.awt.Color;
 import java.awt.Image;
 import java.util.Random;
 
 public class Tortuga {
 	private int x;
 	  private int y;
+	  public int posInicial;
 	  static private int alto = 44;
 	  static private int ancho = 60;
 	  private int velocidad;
@@ -20,8 +20,10 @@ public class Tortuga {
 	  public boolean activar=false;
 
 	  public Tortuga() {
-	    this.x = randomX(posicionUtilizada);
+		posInicial=randomX();
+	    this.x = posInicial;
 	    this.y = 20;
+	    
 	    Random rand = new Random();
 	    boolean bool = rand.nextBoolean();
 	    int num = rand.nextInt(3) + 1;
@@ -30,35 +32,25 @@ public class Tortuga {
 	    } else {
 	      this.velocidad = -1 * num;
 	    }
+	  }	  
+	  
+	  public int getPosInicial() {
+		  return posInicial;
 	  }
 	  
-	  public int[] posicionUtilizada = new int[7];
 	  
-	  public int randomX(int[] posicionUtilizada) {
-		  int[] posicion = new int[7];
+	  public int randomX() {
+		  int[] posicionX = new int[7];
 		  int posInicial = 100;
 		  
 		  Random r = new Random();
 		  
-		  for (int i=0; i<posicion.length;i++) {
-			  posicion[i]=posInicial;
+		  for (int i=0; i<posicionX.length;i++) {
+			  posicionX[i]=posInicial;
 			  posInicial+=100;
-			  System.out.println(posicion[i]);
 		  }
 		  
-		  int posRandom = r.nextInt(posicion.length);
-
-		  for (int pos = 0; pos < posicionUtilizada.length; pos++) {
-			  
-		        posRandom = r.nextInt(posicion.length);
-
-		        // Si la posición no ha sido utilizada, la seleccionamos y la marcamos
-		        if (posicionUtilizada[pos]!=posicion[posRandom]) {
-		            posicionUtilizada[posRandom] = posicion[posRandom];  // Marcamos la posición como utilizada
-		            break;  // Salimos del bucle una vez que encontramos una posición válida
-		        }
-		  }
-		  return posicionUtilizada[posRandom];
+		  return posicionX[r.nextInt(posicionX.length)];
 		  
 	  }
 

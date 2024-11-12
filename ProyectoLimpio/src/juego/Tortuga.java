@@ -2,7 +2,6 @@ package juego;
 
 import entorno.Entorno;
 import entorno.Herramientas;
-
 import java.awt.Image;
 import java.util.Random;
 
@@ -24,7 +23,6 @@ public class Tortuga {
 		posInicial = randomX();
 		this.x = posInicial;
 		this.y = 20;
-
 		Random rand = new Random();
 		boolean bool = rand.nextBoolean();
 		int num = rand.nextInt(3) + 2;
@@ -42,16 +40,12 @@ public class Tortuga {
 	public int randomX() {
 		int[] posicionX = new int[7];
 		int posInicial = 100;
-
 		Random r = new Random();
-
 		for (int i = 0; i < posicionX.length; i++) {
 			posicionX[i] = posInicial;
 			posInicial += 100;
 		}
-
 		return posicionX[r.nextInt(posicionX.length)];
-
 	}
 
 	public void dibujar(Entorno entorno) {
@@ -115,5 +109,4 @@ public class Tortuga {
 	public int getExtremoIzq() {
 		return x - 25;
 	}
-
 }

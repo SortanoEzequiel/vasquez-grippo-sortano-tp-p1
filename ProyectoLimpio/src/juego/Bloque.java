@@ -1,7 +1,6 @@
 package juego;
 
 import java.awt.Image;
-
 import entorno.Herramientas;
 
 public class Bloque {
@@ -42,5 +41,4 @@ public class Bloque {
   public Image getImg() {
     return img;
   }
-
 }

@@ -13,7 +13,6 @@ public class Bloques {
 
 	Bloques() {
 		this.totalBloques = new Bloque[10];
-
 		this.xPosInicial = 100;
 		this.xPos = xPosInicial;
 		this.yPos = 525;
@@ -22,7 +21,6 @@ public class Bloques {
 		this.fila = 1;
 
 		for (int i = 0; i < totalBloques.length; i++) {
-
 			if (i < 4) {
 				totalBloques[i] = new Bloque(this.xPos, this.yPos);
 				this.xPos += distBloque;
@@ -37,11 +35,8 @@ public class Bloques {
 					this.yPos = this.yPos - distPiso;
 					this.fila++;
 				}
-
 				totalBloques[i] = new Bloque(this.xPos, this.yPos);
-
 				this.xPos += distBloque;
-
 				if (i == 6) {
 					this.xPos = xPosInicial * fila;
 				}
@@ -50,10 +45,8 @@ public class Bloques {
 					this.yPos = this.yPos - distPiso;
 					this.fila++;
 				}
-
 				totalBloques[i] = new Bloque(this.xPos, this.yPos);
 				this.xPos += distBloque;
-
 				if (i == 8) {
 					this.xPos = xPosInicial * fila;
 				}

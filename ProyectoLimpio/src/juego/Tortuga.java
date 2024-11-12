@@ -18,6 +18,7 @@ public class Tortuga {
 	  private Image turtleIzq = Herramientas.cargarImagen("imagenes/turtle-izq.png");
 	  public boolean sobreBloque = false;
 	  public boolean activar=false;
+	  public int cantRebotes=0;
 
 	  public Tortuga() {
 		posInicial=randomX();
@@ -26,7 +27,7 @@ public class Tortuga {
 	    
 	    Random rand = new Random();
 	    boolean bool = rand.nextBoolean();
-	    int num = rand.nextInt(3) + 1;
+	    int num = rand.nextInt(3) + 2;
 	    if (bool) {
 	      this.velocidad = num;
 	    } else {
@@ -97,7 +98,7 @@ public class Tortuga {
 	  }
 
 	  public void caer() {
-	    this.y = this.y + 3;
+	    this.y = this.y + 4;
 	  }
 	  
 	  public int getYBase() {

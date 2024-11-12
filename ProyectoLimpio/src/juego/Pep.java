@@ -9,7 +9,6 @@ public class Pep {
 	private int y;
 	private Image pepDer;
 	private Image pepIzq;
-	private int saltosDisponibles;
 	private boolean direccion;
 
 	Pep() {
@@ -17,7 +16,6 @@ public class Pep {
 		this.y = 400;
 		this.pepDer = Herramientas.cargarImagen("imagenes/pep-der.png");
 		this.pepIzq = Herramientas.cargarImagen("imagenes/pep-izq.png");
-		this.saltosDisponibles = 2;
 		this.direccion = true;
 	}
 
@@ -54,10 +52,6 @@ public class Pep {
 		} else {
 			saltoLargo();
 		}
-	}
-
-	public void reiniciarSaltos() {
-		this.saltosDisponibles = 2;
 	}
 
 	public boolean mover(Entorno entorno) {

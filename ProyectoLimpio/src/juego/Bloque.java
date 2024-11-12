@@ -7,13 +7,15 @@ import entorno.Herramientas;
 public class Bloque {
 	private int x;
 	private int y;
+	 static private int alto = 38;
+	  static private int ancho = 135;
 	private Image img;
 	
 	
 	Bloque(int x,int y){
 		this.x=x;
 		this.y=y;
-		this.img=Herramientas.cargarImagen("imagenes/bloque1.jpg");		
+		this.img=Herramientas.cargarImagen("imagenes/ground.png");		
 	}
 	
 	
@@ -44,6 +46,13 @@ public class Bloque {
     public Image getImg() {
     	return img;
     }
+    static public int getAlto() {
+        return alto;
+      }
+
+      static public int getAncho() {
+        return ancho;
+      }
 
     
 }

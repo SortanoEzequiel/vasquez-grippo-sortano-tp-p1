@@ -15,7 +15,7 @@ public class Tortuga {
 	private boolean cayendo = true;
 	private Image turtleDer = Herramientas.cargarImagen("imagenes/turtle-der.png");
 	private Image turtleIzq = Herramientas.cargarImagen("imagenes/turtle-izq.png");
-	public boolean sobreBloque = false;
+	public boolean yaTocoBloque = false;
 	public boolean activar = false;
 	public int cantRebotes = 0;
 

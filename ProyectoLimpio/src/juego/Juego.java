@@ -64,10 +64,10 @@ public class Juego extends InterfaceJuego {
       boolean direccionPep = pep.mover(entorno);
       pep.dibujar(entorno, direccionPep);
       boolean pepNull = pepSobreBloques(bloq);
-      actualizarDisparoPep();
+      manejarDisparoPep();
 
-      actualizarTortugas();
-      actualizarGnomos(pepNull);
+      pepNull = manejarTortugas(pepNull);
+      manejarGnomos();
 
       if (pepNull) {
         this.pep = null;
@@ -168,7 +168,7 @@ public class Juego extends InterfaceJuego {
     }
   }
 
-  public void actualizarGnomos(boolean pepNull) {
+  public void manejarGnomos() {
     for (int i = 0; i < gnomos.length; i++) {
       if (gnomos[i] != null) {
         if (gnomos[i].esActivo) {
@@ -192,10 +192,6 @@ public class Juego extends InterfaceJuego {
                   && tortugas[t].getYBase() > gnomos[i].getY() && tortugas[t].getYAltura() < gnomos[i].getY()) {
                 colisionConTortuga = true;
               }
-              if ((tortugas[t].getExtremoDer() >= pep.getX() && tortugas[t].getExtremoIzq() <= pep.getX()
-                  && tortugas[t].getYBase() >= pep.getY() && tortugas[t].getYAltura() <= pep.getY())) {
-                pepNull = true;
-              }
             }
           }
           if (colisionConTortuga) {
@@ -211,7 +207,7 @@ public class Juego extends InterfaceJuego {
     }
   }
 
-  public void actualizarTortugas() {
+  public boolean manejarTortugas(boolean pepNull) {
     ArrayList<Integer> posiciones = new ArrayList<>();
     for (int t = 0; t < tortugas.length; t++) {
       boolean enBloque = false;
@@ -222,6 +218,10 @@ public class Juego extends InterfaceJuego {
             posiciones.add(Integer.valueOf(tortugas[t].getPosInicial()));
           }
           if (tortugas[t].getYBase() > 300) {
+            if ((tortugas[t].getExtremoDer() >= pep.getX() && tortugas[t].getExtremoIzq() <= pep.getX()
+                  && tortugas[t].getYBase() >= pep.getY() && tortugas[t].getYAltura() <= pep.getY())) {
+                pepNull = true;
+              }
             if (tortugaSobreBloque(tortugas[t])) {
               enBloque = true;
               tortugas[t].sobreBloque = true;
@@ -271,9 +271,10 @@ public class Juego extends InterfaceJuego {
         }
       }
     }
+    return pepNull;
   }
 
-  public void actualizarDisparoPep() {
+  public void manejarDisparoPep() {
     if ((entorno.estaPresionada('c') || entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) && disparoPep == null) {
       this.disparoPep = new DisparoPep(this.pep.getX(), (this.pep.getY() + 20), 7, 20, this.pep.mover(entorno));
     }

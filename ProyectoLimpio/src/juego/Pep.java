@@ -40,10 +40,19 @@ public class Pep {
 		this.y = this.y + 3;
 	}
 
-	public void saltar() {
-		if (this.saltosDisponibles > 0) {
-			this.y -= (this.saltosDisponibles == 1) ? 150 : 70;
-			saltosDisponibles--;
+	public void saltoCorto() {
+		this.y -= 80;
+	}
+
+	public void saltoLargo() {
+		this.y -= 180;
+	}
+
+	public void saltar(boolean saltoCorto) {
+		if (saltoCorto) {
+			saltoCorto();
+		} else {
+			saltoLargo();
 		}
 	}
 
@@ -59,9 +68,6 @@ public class Pep {
 		if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada('a')) {
 			moverIzquierda();
 			direccion = false;
-		}
-		if (entorno.sePresiono(entorno.TECLA_ARRIBA) || entorno.sePresiono('w')) {
-			saltar();
 		}
 		return direccion;
 	}

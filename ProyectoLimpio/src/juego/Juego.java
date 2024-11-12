@@ -109,6 +109,13 @@ public class Juego extends InterfaceJuego {
         base < bloque.getSup() + 5;
   }
 
+  public boolean colisionBloqueSalto(int base, int extDer, int extIzq, int altura, Bloque bloque) {
+    return base > bloque.getSup() &&
+        extDer > bloque.getXizq() &&
+        extIzq < bloque.getXder() &&
+        altura < bloque.getInf();
+  }
+
   public boolean tortugaSobreBloque(Tortuga tortuga) {
     boolean enBloque = false;
     for (Bloque bloque : bloq) {
@@ -121,9 +128,13 @@ public class Juego extends InterfaceJuego {
 
   public boolean pepSobreBloques(Bloque[] bloq) {
     boolean enBloque = false;
+    boolean saltoCorto = false;
     for (int i = 0; i < bloq.length; i++) {
       if (colisionBloque(pep.getYBase(), pep.getExtremoDer(), pep.getExtremoIzq(), bloq[i])) {
         enBloque = true;
+      }
+      if (colisionBloqueSalto(pep.getY() - 70, pep.getExtremoDer(), pep.getExtremoIzq(), pep.getY() - 70, bloq[i])) {
+        saltoCorto = true;
       }
     }
     if (pep.getYAltura() > 600) {
@@ -132,7 +143,9 @@ public class Juego extends InterfaceJuego {
       if (!enBloque) {
         pep.caer();
       } else {
-        pep.reiniciarSaltos();
+        if (entorno.sePresiono(entorno.TECLA_ARRIBA) || entorno.sePresiono('w')) {
+          pep.saltar(saltoCorto);
+        }
       }
     }
     return false;
@@ -309,7 +322,8 @@ public class Juego extends InterfaceJuego {
     entorno.cambiarFont("Calibri Black", 40, new Color(200, 30, 30), 1);
     entorno.escribirTexto("Gnomos perdidos: " + gnomosPerdidos, 205, 400);
     entorno.cambiarFont("Calibri Black", 30, Color.WHITE, 1);
-    entorno.escribirTexto("Presiona ENTER para reiniciar ", 182, 580);
+    if (entorno.tiempo() % 1000 < 500)
+      entorno.escribirTexto("Presiona ENTER para reiniciar ", 182, 580);
     disparoPep = null;
     reiniciarJuego();
   }

@@ -221,21 +221,20 @@ public class Juego extends InterfaceJuego {
             }
             if (tortugaSobreBloque(tortugas[t])) {
               enBloque = true;
-              tortugas[t].sobreBloque = true;
-              if (t < tortugas.length - 1) {
-                if (tortugas[t + 1] == null) {
-                  tortugas[t + 1] = new Tortuga();
-                  tortugas[t + 1].activar = true;
-                }
+              tortugas[t].yaTocoBloque = true;
+              if (t < tortugas.length - 1 && tortugas[t + 1] == null) {
+                tortugas[t + 1] = new Tortuga();
+                tortugas[t + 1].activar = true;
               }
             }
             if (enBloque) {
               tortugas[t].mover();
-            } else if (tortugas[t].sobreBloque) {
-              tortugas[t].rebotar();
-              tortugas[t].cantRebotes++;
+            } else if (tortugas[t].yaTocoBloque) {
               if (tortugas[t].cantRebotes > 2) {
                 tortugas[t].caer();
+              } else {
+                tortugas[t].rebotar();
+                tortugas[t].cantRebotes++;
               }
             } else {
               tortugas[t].caer();

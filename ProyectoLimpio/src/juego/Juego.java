@@ -6,6 +6,8 @@ import entorno.InterfaceJuego;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.util.Random;
+
 import entorno.Herramientas;
 import entorno.Entorno;
 
@@ -21,6 +23,12 @@ public class Juego extends InterfaceJuego
 	
 	private Image casita;
 	
+	private Image Turtle;
+	
+	private Image Gnomo;
+	
+	private Image Reloj;
+	
 	private Bloques bl;
 	
 	private Bloque[] bloq;
@@ -31,9 +39,10 @@ public class Juego extends InterfaceJuego
 	
 	private Gnomo[] gnomos;	
 	
+	private int vidas;
 	
 	private Tortuga[] tortugas;
-		
+	
 	private DisparoPep disparoPep;
 	
 	private int cantNull;
@@ -42,60 +51,73 @@ public class Juego extends InterfaceJuego
 				
 	private int gnomosPerdidos;
 	
-	private int tortugaEliminada;
+	private int enemigosEliminados;
 	
+	private int tiempo;
+
 	private int juegoGanado;
 	
 	private int juegoPerdido;
 	
-	public int posX;
-	
-	private int tiempo;	
-	
 	boolean ganador=false;
+	
 	
 	Juego()
 	{
+		
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);		
-
-		this.fondo = Herramientas.cargarImagen("imagenes/fondogame.jpg");
+        
+		iniciarJuego();
+						
+		this.entorno.iniciar();// Inicia el juego!
 		
-		this.casita= Herramientas.cargarImagen("imagenes/casita.png");		
+	}
+	
+	private void iniciarJuego() {
+		Random rand = new Random();
+		this.fondo = Herramientas.cargarImagen("imagenes/skyhill.jpg");
 		
+		this.casita= Herramientas.cargarImagen("imagenes/casita.png");	
+		
+		this.Turtle = Herramientas.cargarImagen("imagenes/turtle-der.png");
+		
+		this.Gnomo =  Herramientas.cargarImagen("imagenes/gnomo.png");
+		
+		this.Reloj = Herramientas.cargarImagen("imagenes/rel.png");
 		this.gnomosRescatados = 0;
 		this.gnomosPerdidos = 0;
-		this.tortugaEliminada=0;
-	
-		this.tiempo = this.entorno.tiempo();
+	    this.enemigosEliminados = 0;
+	    this.vidas=5;
+	    this.tiempo = this.entorno.tiempo();
 		 
 		this.bl = new Bloques();
 		
 		this.gnomo = new Gnomo();
 		
 		this.pep = new Pep(); // Creo a PEP
-		
-		this.gnomos= new Gnomo[4];
-		
-		gnomo.asignar(gnomos);		
-		
-		this.tortugas = new Tortuga[3];		
-		
-		
-		tortugas[0]=new Tortuga();
-		tortugas[0].activar=true;
-		
+        
 		this.cantNull=0;
 		
 		this.juegoGanado=15;
 		
 		this.juegoPerdido=10;
 				
+		
+		this.gnomos= new Gnomo[4];
+		
+		gnomo.asignar(gnomos);		
+		
+		this.tortugas = new Tortuga[3];
+		for (int i = 0; i < tortugas.length; i++) {
+			int num;
+			do {
+				num = rand.nextInt(800) + 1;
+			} while (400 - Bloque.getAncho() / 2 < num && num < 400 + Bloque.getAncho() / 2);
+			tortugas[i] = new Tortuga(num);
+		}
+		
+				
 		this.bloq = bl.getTotalBloques();	
-						
-		this.entorno.iniciar();// Inicia el juego!
-		
-		
-		
 	}
 
 	/**
@@ -107,173 +129,173 @@ public class Juego extends InterfaceJuego
 	public void tick()
 	{
 		// Procesamiento de un instante de tiempo
-		
-		
+		entorno.cambiarFont("Arial Black", 20, Color.black);
 		entorno.dibujarImagen(fondo,entorno.ancho() / 2, entorno.alto() / 2, 0);
-		
-		
+	
 		if (this.pep != null){
+		
+		entorno.dibujarImagen(Turtle, 30, 30, 0, 0.06);
+		entorno.escribirTexto("Eliminadas: "+ enemigosEliminados, 65, 43);
+		entorno.dibujarImagen(Gnomo, 30, 70, 0, 0.014);
+		entorno.escribirTexto("Rescatados: "+ gnomosRescatados, 65, 85); //Se escribe el texto y la cantidad e gnomos rescatados 		
+		entorno.dibujarImagen(Gnomo, 30, 120, 0, 0.014);
+		entorno.escribirTexto("Perdidos: "+ gnomosPerdidos, 65, 130);
+		entorno.dibujarImagen(Reloj, 360, 25, 0, 0.014);
+		entorno.escribirTexto(MinutosTranscurrido() + ":"+ SegundosTranscurrido()+"s", 380, 30);
+		bl.dibujarBloques(entorno);
+		entorno.dibujarImagen(casita, 400, 100, 0,0.11);
+		
+		
+		    
+		    
+		    actualizarTortugas();
+				
 			
-			entorno.cambiarFont("Arial Black", 20, Color.BLACK);
-			entorno.escribirTexto("Gnomos Rescatados: "+ gnomosRescatados, 10, 30); //Se escribe el texto y la cantidad e gnomos rescatados 		
-			entorno.escribirTexto("Gnomos perdidos: "+ gnomosPerdidos, 10, 60);
-			entorno.escribirTexto("Enemigos eliminados: "+ tortugaEliminada, 10, 90);
-			entorno.escribirTexto(MinutosTranscurrido() + ":"+ SegundosTranscurrido()+"s", 700, 30);
-			bl.dibujarBloques(entorno);
-			entorno.dibujarImagen(casita, 400, 100, 0,0.11);
 			
-			boolean direccionPep= pep.moverPep(entorno);
 			
-			pep.dibujarPep(entorno, direccionPep);
+			
+			
+			
 						
 			boolean pepNull = pepSobreBloques(bloq);
-
-			//ESTRUCTURA DE TORTUGAS
-			for (int t = 0; t < tortugas.length; t++) {
-				boolean enBloque=false;
-				
-				if (tortugas[t] != null ) {
-					if (tortugas[t].activar==true) {
-						tortugas[t].dibujar(entorno);
-					}
-										
-					if (tortugas[t].getYBase()>300) {
-						if (tortugaSobreBloque(tortugas[t])) {
-							enBloque = true;
-							tortugas[t].sobreBloque = true;
-							if (t<tortugas.length-1) {
-								if (tortugas[t+1]==null) {									
-																		
-									tortugas[t+1]=new Tortuga();
-									tortugas[t+1].activar=true;							
-								}
-							}
-							
-							
-						}
-						if (enBloque) {
-							
-							tortugas[t].mover();
-						} else if (tortugas[t].sobreBloque) {
-							tortugas[t].rebotar();
-						} else {
-							tortugas[t].caer();
-						}
-					}else {
-						tortugas[t].caer();
-					}
-
-					if (disparoPep != null && tortugas[t] != null
-							&& (tortugas[t].getExtremoDer() >= disparoPep.getX()
-									&& tortugas[t].getExtremoIzq() <= disparoPep.getX()
-									&& tortugas[t].getYBase() >= disparoPep.getY()
-									&& tortugas[t].getYAltura() <= disparoPep.getY())) {
-						tortugas[t] = null;
-						disparoPep = null;
-						tortugaEliminada++;
-					}
-				}else {
-					tortugas[t]=new Tortuga();
-					tortugas[t].activar=true;
+			boolean direccionPep= pep.moverPep(entorno);
+			pep.dibujarPep(entorno, direccionPep);
+		  
+			
+			for(int i=0;i<tortugas.length;i++) {
+				if(tortugas[i] != null && pep != null) {
+					if(colisionPepTortuga(i))
+					   	this.pep=null;
+				   
+					   
 				}
-			}					
-			
-			
-			//ESTRUCTURA DE GNOMOS
+				
+			}
+			  
+				
 			for (int i=0;i<gnomos.length;i++) {
-				if (i-cantNull<4) {
-					
-					if (gnomos[i]!=null) {
-						if (gnomos[i].esActivo ) { 
-							lanzarGnomo(entorno, gnomos, bloq,i); //probar poner el booleano de si esta activo en gnomo.lanzargnomo(entorno, gnomos[0], bloq, ESACTIVO)
-						}
-						if (((pep.getExtremoDer()>=gnomos[i].getExtremoIzq() && pep.getExtremoIzq()<=gnomos[i].getExtremoDer()) && (pep.getYBase() >= gnomos[i].getY()  && pep.getYAltura() <= gnomos[i].getY() )) && (pep.getYAltura()>=300)) {
-							gnomos[i]=null;
-							System.out.println("gnomo "+i+" es null");
-							cantNull++;
-							gnomosRescatados++;
-							System.out.println(cantNull);
-						}else if(gnomos[i].getY()>600) {
-							gnomos[i]=null;
-							cantNull++;
-							gnomosPerdidos++;
-						}else {
-				            boolean colisionConTortuga = false;
-				            for (int t = 0; t < tortugas.length; t++) {
-				            	if (tortugas[t]!=null && tortugas[t].getYBase()>300) {
-				            		if (tortugas[t].getExtremoDer()>gnomos[i].getX() && tortugas[t].getExtremoIzq() < gnomos[i].getX() && tortugas[t].getYBase()>gnomos[i].getY() && tortugas[t].getYAltura()<gnomos[i].getY()) {
-					                    colisionConTortuga = true;
-					                    System.out.println(colisionConTortuga);
-					                    
-					                }
-					                
-					                if((tortugas[t].getExtremoDer()>=pep.getX() && tortugas[t].getExtremoIzq() <= pep.getX() && tortugas[t].getYBase()>=pep.getY() && tortugas[t].getYAltura()<=pep.getY())) {
-										pepNull=true;
-									} 
-				            	}
-				            }
-
-				            if (colisionConTortuga) {
-				                gnomos[i] = null;
-				                gnomosPerdidos++;
-				                cantNull++;
-				            }   				            
-				        }
-					}else {
-						gnomos[i]=new Gnomo();
-						gnomos[i].activar();
-					}
-				}					
-			}					
 			
-			if((entorno.estaPresionada('c') || entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) && disparoPep == null) {
+				if (gnomos[i]!=null) {
+					
+					lanzarGnomo(entorno, gnomos, bloq,i); //probar poner el booleano de si esta activo en gnomo.lanzargnomo(entorno, gnomos[0], bloq, ESACTIVO)
+					
+					if(pep != null) {
+					if (((pep.getExtremoDer()>=gnomos[i].getExtremoIzq() && pep.getExtremoIzq()<=gnomos[i].getExtremoDer()) && (pep.getYBase() >= gnomos[i].getY()  && pep.getYAltura() <= gnomos[i].getY() )) && (pep.getYAltura()>=300)) {
+						gnomos[i]=null;
+						this.gnomos[i] = new Gnomo();
+						gnomosRescatados++;
+					}
+					if(gnomos[i].getY()>600) {
+						gnomos[i]=null;
+						this.gnomos[i] = new Gnomo();
+						gnomosPerdidos++;
+					}
+					for(Tortuga tortuga:tortugas) {
+						if((tortuga.getExtremoDer()>=gnomos[i].getX() && tortuga.getExtremoIzq() <= gnomos[i].getX() && tortuga.getYBase()-20>=gnomos[i].getY() && tortuga.getYAltura()+10<=gnomos[i].getY())) {
+							gnomos[i]=null;
+							this.gnomos[i] = new Gnomo();
+							gnomosPerdidos++;
+						}
+					}
+					
+				  }
+				}				
+				/*entorno.dibujarCirculo(pep.getDer()+10, pep.getY(), 10, Color.green);
+				entorno.dibujarCirculo(gnomos[i].getX()-20, gnomos[i].getY(), 10, Color.red);				
+				entorno.dibujarCirculo(gnomos[i].getX()+20, gnomos[i].getY(), 10, Color.orange);	*/
+				
+			}	
+			
+			//DISPARO------------------------------------ Colision con tortuga
+			 if(disparoPep == null && this.entorno.sePresiono('c') ) {
 			     System.out.println("se presiono");
-				 this.disparoPep = new DisparoPep(this.pep.getX(), (this.pep.getY()+20), 7, 20, this.pep.moverPep(entorno));
+				 this.disparoPep = new DisparoPep(this.pep.getX(), (this.pep.getY()+16), 7, 20, this.pep.moverPep(entorno));
 			    
 			 }
 			    
-			if(disparoPep != null) {
+			    if(disparoPep != null) {
 			    	
-			    this.disparoPep.moverDisparo();
-			    this.disparoPep.dibujarDisparo(entorno);
-			    if (disparoPep.getX() >= 800 || this.disparoPep.getX() <= 0) {
-			    	disparoPep = null;
+			    	this.disparoPep.moverDisparo();
+			    	this.disparoPep.dibujarDisparo(entorno);
+			    	if (disparoPep.getX() >= 800 || this.disparoPep.getX() <= 0) {
+			    		disparoPep = null;
+			    	}
+			    		colisionDisparoTortuga();
+			    	
 			    }
+			    if (pepNull) {
+					this.pep=null;
+				}
 			    
-			}		
+			    if (gnomosRescatados==juegoGanado) {
+					ganador=true;
+				
+					this.pep=null;
+				}
+				if (gnomosPerdidos==juegoPerdido) {
 					
-		
-			if (pepNull) {
-				this.pep=null;
-			}
-			
-			if (gnomosRescatados==juegoGanado) {
-				ganador=true;
-				this.pep=null;
-			}
-			if (gnomosPerdidos==juegoPerdido) {
-				this.pep=null;
-			}
-			
-			
+					this.pep=null;
+				}
+				
 		}else {
 			if (ganador) {
-				entorno.cambiarFont("Arial Black", 50, Color.BLUE);
-				entorno.escribirTexto("GANASTE", 285, 250);
-				entorno.cambiarFont("Arial Black", 40, Color.GREEN);
-				entorno.escribirTexto("Gnomos Rescatados: "+ gnomosRescatados, 160, 350); //Se escribe el texto y la cantidad e gnomos rescatados 		
+				entorno.cambiarFont("Arial Black", 40, Color.BLACK);
+				entorno.escribirTexto("GANASTE", 285, 100);
 				entorno.cambiarFont("Arial Black", 40, Color.RED);
-				entorno.escribirTexto("Gnomos perdidos: "+ gnomosPerdidos, 200, 400);
+				entorno.dibujarImagen(Gnomo, 240, 330, 0, 0.014);
+				entorno.escribirTexto("Rescatados: "+ gnomosRescatados, 260, 350); //Se escribe el texto y la cantidad e gnomos rescatados 		
+				entorno.cambiarFont("Arial Black", 40, Color.RED);
+				entorno.dibujarImagen(Gnomo, 240, 400, 0, 0.014);
+				entorno.escribirTexto("Perdidos: "+ gnomosPerdidos, 260, 420);
+				
+				entorno.cambiarFont("Arial Black", 30, Color.RED);
+				entorno.escribirTexto("Presiona ENTER para reiniciar ", 150, 550);
+				disparoPep = null;
+				reiniciarJuego();
 			}else {
-				entorno.cambiarFont("Arial Black", 50, Color.RED);
-				entorno.escribirTexto("PERDISTE", 285, 250);
-				entorno.cambiarFont("Arial Black", 40, Color.GREEN);
-				entorno.escribirTexto("Gnomos Rescatados: "+ gnomosRescatados, 160, 350); //Se escribe el texto y la cantidad e gnomos rescatados 		
-				entorno.cambiarFont("Arial Black", 40, Color.BLUE);
-				entorno.escribirTexto("Gnomos perdidos: "+ gnomosPerdidos, 200, 400);
-			}			
+				entorno.cambiarFont("Arial Black", 40, Color.BLACK);
+				entorno.escribirTexto("PERDISTE", 285, 100);
+				entorno.cambiarFont("Arial Black", 40, Color.RED);
+				entorno.dibujarImagen(Gnomo, 240, 330, 0, 0.014);
+				entorno.escribirTexto("Rescatados: "+ gnomosRescatados, 260, 350); //Se escribe el texto y la cantidad e gnomos rescatados 		
+				entorno.cambiarFont("Arial Black", 40, Color.RED);
+				entorno.dibujarImagen(Gnomo, 240, 400, 0, 0.014);
+				entorno.escribirTexto("Perdidos: "+ gnomosPerdidos, 260, 420);
+				
+				entorno.cambiarFont("Arial Black", 30, Color.RED);
+				entorno.escribirTexto("Presiona ENTER para reiniciar ", 150, 550);
+				disparoPep = null;
+				
+				reiniciarJuego();
+				
 		}
-	}	
+		}
+				
+		
+		
+
+		/*entorno.dibujarCirculo(pep.getExtremoIzq(),pep.getYAltura(),10,Color.orange);
+		entorno.dibujarCirculo(pep.getX(),gnomo.getYBase(),10,Color.green);
+		entorno.dibujarCirculo(gnomo.getX()-10,bloq[9].getSup(),10,Color.red);*/
+		
+
+	}
+	
+			
+    public void reiniciarJuego() {
+    	if(entorno.sePresiono(entorno.TECLA_ENTER)) {
+			this.iniciarJuego();
+		}
+    }
+	
+	
+	public void reaparecerPep(Entorno entorno) {
+		if (pep == null) {
+	    this.pep = new Pep();
+		boolean direccionPepp= pep.moverPep(entorno);
+	    pep.dibujarPep(entorno, direccionPepp);
+		}
+	}
 	
 	  public int MinutosTranscurrido() {
 		    int tiempoTranscurrido =  this.entorno.tiempo();
@@ -290,23 +312,13 @@ public class Juego extends InterfaceJuego
 			gnomos[i]=null;
 	  }
 	
-	public boolean colisionBloque(int base,int extDer,int extIzq,Bloque bloque) {
+	public boolean colisionBloque(int base,int altura,int extDer,int extIzq,Bloque bloque) {
 		return 	base>= bloque.getSup() && 
 				extDer> bloque.getXizq() && 
 				extIzq<bloque.getXder() && 	
 				base<bloque.getSup()+5;
 				// altura < bloque.getInf()
 				
-	}
-	
-	public boolean tortugaSobreBloque(Tortuga tortuga) {
-		boolean enBloque=false;	
-		for (Bloque bloque: bloq) {
-			if(colisionBloque(tortuga.getYBase(),tortuga.getX(),tortuga.getX(),bloque)) {
-				enBloque=true;
-			}
-		}
-		return enBloque;
 	}
 	
 	
@@ -317,12 +329,13 @@ public class Juego extends InterfaceJuego
 		
 					
 		for (int i=0;i<bloq.length;i++) {
-			if (colisionBloque(pep.getYBase(),pep.getExtremoDer(),pep.getExtremoIzq(),bloq[i])) {
+			if (colisionBloque(pep.getYBase(),pep.getYAltura(),pep.getExtremoDer(),pep.getExtremoIzq(),bloq[i])) {
 				enBloque=true;
 			}
 		}
 		
 		if (pep.getYAltura()>600) {
+			pep = null;
 			return true;
 		}else {
 			if (!enBloque) {
@@ -340,7 +353,7 @@ public class Juego extends InterfaceJuego
 		
 		if (gnomo[numGnomo].seCayo==false) {
 			gnomo[numGnomo].moverGnomo(gnomo[numGnomo]);
-			if(!colisionBloque(gnomo[numGnomo].getYBase(),gnomo[numGnomo].getExtremoDer(),gnomo[numGnomo].getExtremoIzq(),bloq[9])) {
+			if(!colisionBloque(gnomo[numGnomo].getYBase(),gnomo[numGnomo].getYAltura(),gnomo[numGnomo].getExtremoDer(),gnomo[numGnomo].getExtremoIzq(),bloq[9])) {
 				gnomo[numGnomo].seCayo=true;
 				if (numGnomo<gnomo.length-1) {
 					gnomo[numGnomo+1].activar();
@@ -352,7 +365,7 @@ public class Juego extends InterfaceJuego
 		else {				
 				boolean enBloque = false;
 				for (int i=0;i<bloq.length-1;i++) {
-					if (colisionBloque(gnomo[numGnomo].getYBase(),gnomo[numGnomo].getExtremoDer(),gnomo[numGnomo].getExtremoIzq(),bloq[i])){
+					if (colisionBloque(gnomo[numGnomo].getYBase(),gnomo[numGnomo].getYAltura(),gnomo[numGnomo].getExtremoDer(),gnomo[numGnomo].getExtremoIzq(),bloq[i])){
 						enBloque=true;					
 					}
 				}
@@ -367,10 +380,96 @@ public class Juego extends InterfaceJuego
 					gnomo[numGnomo].moverGnomo(gnomo[numGnomo]);
 				}
 			}	
+		
 	}
 
+	public void colisionDisparoTortuga() {
+		 for(int tortuga = 0; tortuga < tortugas.length ;tortuga++) {
+			 if(disparoPep != null && tortugas[tortuga] != null &&
+			    tortugas[tortuga].getExtremoDer()>=disparoPep.getX() &&
+			    tortugas[tortuga].getExtremoIzq() <= disparoPep.getX() && 
+			    tortugas[tortuga].getYBase()>=disparoPep.getY() && 
+			    tortugas[tortuga].getYAltura()<=disparoPep.getY()) {
+				tortugas[tortuga] = null;
+				disparoPep = null;
+				int num;
+				Random rand = new Random();
+				do {
+						num = rand.nextInt(800) + 1;
+				} while (400 - Bloque.getAncho() / 2 < num && num < 400 + Bloque.getAncho() / 2);
+				tortugas[tortuga] = new Tortuga(num);
+				enemigosEliminados++;
+			 }	
+         }
+		
+	}
 	
+	private boolean colisionPepTortuga(int i) {
+		    int pepX = pep.getX();
+		    int pepY = pep.getY(); 
+		    int pepAlto = pep.getYAltura();   // Altura del objeto 'pep'
+            int pepDer= pep.getExtremoDer();
+            int pepIzq= pep.getExtremoIzq();
+		    int tortugaX = tortugas[i].getExtremoIzq();  // Coordenada X de la tortuga (izquierda)
+		    int tortugaY = tortugas[i].getY();           // Coordenada Y de la tortuga
+		    int tortugaAncho = tortugas[i].getAncho();   // Ancho de la tortuga
+		    int tortugaAlto = tortugas[i].getAlto();     // Altura de la tortuga
+		    boolean colisionX = pepX < (tortugaX + tortugaAncho) && (pepX + 30) > tortugaX;
+		    boolean colisionY = pepY > (tortugaY-74) && pepY < (tortugaY + tortugaAlto);
+     return colisionX && colisionY;
+	}
 	
+	private void actualizarTortugas() {
+		for (int i = 0; i < this.tortugas.length; i++) {
+			this.tortugas[i].dibujar(this.entorno);
+		}
+		
+		for (int i = 0; i < this.bloq.length; i++) {
+			for (int j = 0; j < this.tortugas.length; j++) {
+				if (TortugaSobrePiso(this.bloq[i], this.tortugas[j])) {
+					this.tortugas[j].setCayendo(false);
+					this.tortugas[j].mover();
+					if (tortugaPisaBorde(this.bloq[i], this.tortugas[j])) {
+						
+							this.tortugas[j].rebotar();
+						
+						
+					}
+				}
+			}
+		}
+		for (int i = 0; i < this.tortugas.length; i++) {
+			if (this.tortugas[i].getCayendo()) {
+				this.tortugas[i].caer();
+				if(this.tortugas[i].getY()>610) {
+					this.tortugas[i] = null;
+					int num;
+					Random rand = new Random();
+					do {
+							num = rand.nextInt(800) + 1;
+					} while (400 - Bloque.getAncho() / 2 < num && num < 400 + Bloque.getAncho() / 2);
+					tortugas[i] = new Tortuga(num);
+					enemigosEliminados++;
+				}
+				
+				
+			}
+		}
+	}
+
+	private boolean TortugaSobrePiso(Bloque piso, Tortuga tortuga) {
+		return colision(piso.getY()-5, tortuga.getY()) && piso.getX() - Bloque.getAncho() / 2 < tortuga.getX()
+				&& tortuga.getX() < piso.getX() + Bloque.getAncho() / 2;
+	}
+
+	private boolean tortugaPisaBorde(Bloque piso, Tortuga tortuga) {
+		return colision(tortuga.getX(), piso.getX() - Bloque.getAncho() / 2)
+				|| colision(tortuga.getX(), piso.getX() + Bloque.getAncho() / 2);
+	}
+
+	private boolean colision(int a, int b) {
+		return Math.abs(a - b) <= 7; 
+	}
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args)
@@ -378,4 +477,3 @@ public class Juego extends InterfaceJuego
 		Juego juego = new Juego();
 	}
 }
-

@@ -97,7 +97,7 @@ public class Pep {
 	}
 	
 	public int getYBase() {
-		return y+38;
+		return y+30;
 	}
 	
 	public int getYAltura() {

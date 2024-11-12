@@ -20,37 +20,18 @@ public class Juego extends InterfaceJuego {
   private Gnomo[] gnomos;
   private Tortuga[] tortugas;
   private DisparoPep disparoPep;
-  private int cantNull;
   private int gnomosRescatados;
   private int gnomosPerdidos;
   private int tortugaEliminada;
   private int juegoGanado;
   private int juegoPerdido;
   public int posX;
-  private int tiempo;
   boolean ganador = false;
   public int[] posicionUtilizada = new int[7];
 
   Juego() {
     this.entorno = new Entorno(this, "TP P1 - Grippo, Sortano, Vasquez", 800, 600);
-    this.fondo = Herramientas.cargarImagen("imagenes/skyhill.jpg");
-    this.casita = Herramientas.cargarImagen("imagenes/house.png");
-    this.gnomosRescatados = 0;
-    this.gnomosPerdidos = 0;
-    this.tortugaEliminada = 0;
-    this.tiempo = this.entorno.tiempo();
-    this.bl = new Bloques();
-    this.gnomo = new Gnomo();
-    this.pep = new Pep();
-    this.gnomos = new Gnomo[4];
-    gnomo.asignar(gnomos);
-    this.tortugas = new Tortuga[3];
-    tortugas[0] = new Tortuga();
-    tortugas[0].activar = true;
-    this.cantNull = 0;
-    this.juegoGanado = 15;
-    this.juegoPerdido = 10;
-    this.bloq = bl.getTotalBloques();
+    this.iniciarJuego();
     this.entorno.iniciar();
   }
 
@@ -84,6 +65,25 @@ public class Juego extends InterfaceJuego {
     } else {
       mensajeFinal(ganador);
     }
+  }
+
+  public void iniciarJuego() {
+    this.fondo = Herramientas.cargarImagen("imagenes/skyhill.jpg");
+    this.casita = Herramientas.cargarImagen("imagenes/house.png");
+    this.gnomosRescatados = 0;
+    this.gnomosPerdidos = 0;
+    this.tortugaEliminada = 0;
+    this.bl = new Bloques();
+    this.gnomo = new Gnomo();
+    this.pep = new Pep();
+    this.gnomos = new Gnomo[4];
+    gnomo.asignar(gnomos);
+    this.tortugas = new Tortuga[3];
+    tortugas[0] = new Tortuga();
+    tortugas[0].activar = true;
+    this.juegoGanado = 15;
+    this.juegoPerdido = 10;
+    this.bloq = bl.getTotalBloques();
   }
 
   public int minutosTranscurridos() {
@@ -178,11 +178,9 @@ public class Juego extends InterfaceJuego {
             && (pep.getYBase() >= gnomos[i].getY() && pep.getYAltura() <= gnomos[i].getY()))
             && (pep.getYAltura() >= 300)) {
           gnomos[i] = null;
-          cantNull++;
           gnomosRescatados++;
         } else if (gnomos[i].getY() > 600) {
           gnomos[i] = null;
-          cantNull++;
           gnomosPerdidos++;
         } else {
           boolean colisionConTortuga = false;
@@ -197,7 +195,6 @@ public class Juego extends InterfaceJuego {
           if (colisionConTortuga) {
             gnomos[i] = null;
             gnomosPerdidos++;
-            cantNull++;
           }
         }
       } else {
@@ -219,9 +216,9 @@ public class Juego extends InterfaceJuego {
           }
           if (tortugas[t].getYBase() > 300) {
             if ((tortugas[t].getExtremoDer() >= pep.getX() && tortugas[t].getExtremoIzq() <= pep.getX()
-                  && tortugas[t].getYBase() >= pep.getY() && tortugas[t].getYAltura() <= pep.getY())) {
-                pepNull = true;
-              }
+                && tortugas[t].getYBase() >= pep.getY() && tortugas[t].getYAltura() <= pep.getY())) {
+              pepNull = true;
+            }
             if (tortugaSobreBloque(tortugas[t])) {
               enBloque = true;
               tortugas[t].sobreBloque = true;
@@ -303,18 +300,33 @@ public class Juego extends InterfaceJuego {
       entorno.dibujarRectangulo(400, 232, 300, 50, 0, new Color(30, 200, 30));
       entorno.cambiarFont("Calibri Black", 50, Color.BLACK, 1);
       entorno.escribirTexto("GANASTE", 280, 250);
-      entorno.cambiarFont("Calibri Black", 40, new Color(30, 200, 30), 1);
-      entorno.escribirTexto("Gnomos Rescatados: " + gnomosRescatados, 160, 350);
-      entorno.cambiarFont("Calibri Black", 40, new Color(200, 30, 30), 1);
-      entorno.escribirTexto("Gnomos perdidos: " + gnomosPerdidos, 200, 400);
     } else {
       entorno.dibujarRectangulo(400, 232, 300, 50, 0, new Color(200, 30, 30));
       entorno.cambiarFont("Calibri Black", 50, Color.BLACK, 1);
       entorno.escribirTexto("PERDISTE", 275, 250);
-      entorno.cambiarFont("Calibri Black", 40, new Color(30, 200, 30), 1);
-      entorno.escribirTexto("Gnomos Rescatados: " + gnomosRescatados, 160, 350);
-      entorno.cambiarFont("Calibri Black", 40, new Color(200, 30, 30), 1);
-      entorno.escribirTexto("Gnomos perdidos: " + gnomosPerdidos, 200, 400);
+    }
+    entorno.cambiarFont("Calibri Black", 40, new Color(30, 200, 30), 1);
+    entorno.escribirTexto("Gnomos Rescatados: " + gnomosRescatados, 175, 350);
+    entorno.cambiarFont("Calibri Black", 40, new Color(200, 30, 30), 1);
+    entorno.escribirTexto("Gnomos perdidos: " + gnomosPerdidos, 205, 400);
+    entorno.cambiarFont("Calibri Black", 30, Color.WHITE, 1);
+    entorno.escribirTexto("Presiona ENTER para reiniciar ", 182, 580);
+    disparoPep = null;
+    reiniciarJuego();
+  }
+
+  public void reiniciarJuego() {
+    if (entorno.sePresiono(entorno.TECLA_ENTER)) {
+      this.iniciarJuego();
+      this.entorno.iniciar();
+    }
+  }
+
+  public void reaparecerPep(Entorno entorno) {
+    if (pep == null) {
+      this.pep = new Pep();
+      boolean direccionPepp = pep.mover(entorno);
+      pep.dibujar(entorno, direccionPepp);
     }
   }
 

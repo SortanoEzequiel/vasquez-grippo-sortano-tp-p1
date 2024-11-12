@@ -38,6 +38,7 @@ public class Juego extends InterfaceJuego {
   public void tick() {
     entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0);
     if (this.pep != null) {
+      entorno.dibujarRectangulo(400,300,800,600,0, new Color(1f,0f,0f,gnomosPerdidos/10f));
       bl.dibujarBloques(entorno);
       entorno.dibujarImagen(casita, 400, 85, 0, 0.25);
 

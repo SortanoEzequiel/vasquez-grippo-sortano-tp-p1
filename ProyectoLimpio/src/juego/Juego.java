@@ -5,7 +5,7 @@ import entorno.Herramientas;
 import entorno.InterfaceJuego;
 import java.util.Random;
 import java.awt.Image;
-import java.awt.Color;
+// import java.awt.Color;
 // import java.awt.Font;
 
 public class Juego extends InterfaceJuego {
@@ -33,11 +33,12 @@ public class Juego extends InterfaceJuego {
 		pisosX = xValues;
 		pisosY = yValues;
 		pisos = new Piso[pisosX.length];
-		tortugas = new Tortuga[100];
+		tortugas = new Tortuga[1];
 		for (int i = 0; i < tortugas.length; i++) {
 			int num;
 			do {
 				num = rand.nextInt(800) + 1;
+				num = 134;
 			} while (400 - Piso.getAncho() / 2 < num && num < 400 + Piso.getAncho() / 2);
 			tortugas[i] = new Tortuga(num);
 		}
@@ -60,6 +61,9 @@ public class Juego extends InterfaceJuego {
 	}
 
 	private void actualizarTortugas() {
+		Random rand = new Random();
+		// boolean pasarse = rand.nextInt(5) == 0;
+		boolean pasarse = false;
 		for (int i = 0; i < this.tortugas.length; i++) {
 			this.tortugas[i].dibujar(this.entorno);
 		}
@@ -68,8 +72,11 @@ public class Juego extends InterfaceJuego {
 				if (TortugaSobrePiso(this.pisos[i], this.tortugas[j])) {
 					this.tortugas[j].setCayendo(false);
 					this.tortugas[j].mover();
-					if (tortugaPisaBorde(this.pisos[i], this.tortugas[j])) {
+					if (tortugaLlegaABorde(this.pisos[i], this.tortugas[j]) && pasarse) {
 						this.tortugas[j].rebotar();
+					} else if (pasarse) {
+						this.tortugas[j].setCayendo(true);
+						this.tortugas[j].caer();
 					}
 				}
 			}
@@ -82,17 +89,17 @@ public class Juego extends InterfaceJuego {
 	}
 
 	private boolean TortugaSobrePiso(Piso piso, Tortuga tortuga) {
-		return colision(piso.getY(), tortuga.getY()) && piso.getX() - Piso.getAncho() / 2 < tortuga.getX()
-				&& tortuga.getX() < piso.getX() + Piso.getAncho() / 2;
+		return piso.getY() - Piso.getAlto() / 2 == tortuga.getY() + Tortuga.getAlto() / 2
+				&& piso.getX() - Piso.getAncho() / 2 < tortuga.getX() + Tortuga.getAncho() / 2
+				&& tortuga.getX() - Tortuga.getAncho() / 2 < piso.getX() + Piso.getAncho() / 2;
 	}
 
-	private boolean tortugaPisaBorde(Piso piso, Tortuga tortuga) {
-		return colision(tortuga.getX(), piso.getX() - Piso.getAncho() / 2)
-				|| colision(tortuga.getX(), piso.getX() + Piso.getAncho() / 2);
-	}
-
-	private boolean colision(int a, int b) {
-		return Math.abs(a - b) <= 3; 
+	private boolean tortugaLlegaABorde(Piso piso, Tortuga tortuga) {
+		boolean colisionIzq = tortuga.getX() - Tortuga.getAncho() / 2 == piso.getX() - Piso.getAncho() / 2
+				&& tortuga.getX() > piso.getX() - Piso.getAncho() / 2 && tortuga.getDireccion() == "izquierda";
+		boolean colisionDer = tortuga.getX() + Tortuga.getAncho() / 2 == piso.getX() + Piso.getAncho() / 2
+				&& tortuga.getX() < piso.getX() + Piso.getAncho() / 2 && tortuga.getDireccion() == "derecha";
+		return colisionIzq || colisionDer;
 	}
 
 	@SuppressWarnings("unused")

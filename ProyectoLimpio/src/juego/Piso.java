@@ -25,7 +25,7 @@ public class Piso {
   }
 
   public int getY() {
-    return this.y + 3; // corrige la altura por la imagen
+    return this.y + 10;
   }
 
   static public int getAlto() {

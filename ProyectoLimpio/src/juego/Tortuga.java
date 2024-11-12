@@ -10,26 +10,20 @@ public class Tortuga {
   private int y;
   static private int alto = 44;
   static private int ancho = 60;
-  private int velocidad;
+  private int direccion;
   private boolean cayendo = true;
   private Image turtleDer = Herramientas.cargarImagen("imagenes/turtle-der.png");
   private Image turtleIzq = Herramientas.cargarImagen("imagenes/turtle-izq.png");
 
   public Tortuga(int x) {
     this.x = x;
-    this.y = 20;
+    this.y = 200;
     Random rand = new Random();
-    boolean bool = rand.nextBoolean();
-    int num = rand.nextInt(3) + 2;
-    if (bool) {
-      this.velocidad = num;
-    } else {
-      this.velocidad = -1 * num;
-    }
+    this.direccion = rand.nextBoolean() ? 1 : -1;
   }
 
   public void dibujar(Entorno entorno) {
-    Image turtle = this.velocidad > 0 ? turtleDer : turtleIzq;
+    Image turtle = this.direccion > 0 ? turtleDer : turtleIzq;
     entorno.dibujarImagen(turtle, x, y, 0, 0.1);
   }
 
@@ -38,7 +32,7 @@ public class Tortuga {
   }
 
   public int getY() {
-    return y + (alto / 2);
+    return y;
   }
 
   static public int getAlto() {
@@ -49,12 +43,12 @@ public class Tortuga {
     return ancho;
   }
 
-  public boolean getCayendo() {
-    return cayendo;
+  public String getDireccion() {
+    return this.direccion < 0 ? "izquierda" : "derecha";
   }
 
-  public int getVelocidad() {
-    return velocidad;
+  public boolean getCayendo() {
+    return cayendo;
   }
 
   public void setCayendo(boolean cae) {
@@ -62,15 +56,15 @@ public class Tortuga {
   }
 
   public void rebotar() {
-    this.velocidad = this.velocidad * (-1);
-    this.x = this.x + this.velocidad;
+    this.direccion = this.direccion * (-1);
+    // this.x = this.x + this.direccion;
   }
 
   public void mover() {
-    this.x = this.x + this.velocidad;
+    this.x = this.x + this.direccion;
   }
 
   public void caer() {
-    this.y = this.y + 2;
+    this.y = this.y + 1;
   }
 }
